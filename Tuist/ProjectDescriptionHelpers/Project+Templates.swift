@@ -29,14 +29,14 @@ extension Project {
                 sources: ["Targets/\(name)/Sources/**"],
                 resources: [],
                 dependencies: [])
-        let tests = Target(name: "\(name)Tests",
-                platform: platform,
-                product: .unitTests,
-                bundleId: "retaeded.Job4m.Tests",
-                infoPlist: .default,
-                sources: ["Targets/\(name)/Tests/**"],
-                resources: [],
-                dependencies: [.target(name: name)])
+//        let tests = Target(name: "\(name)Tests",
+//                platform: platform,
+//                product: .unitTests,
+//                bundleId: "retaeded.Job4m.Tests",
+//                infoPlist: .default,
+//                sources: ["Targets/\(name)/Tests/**"],
+//                resources: [],
+//                dependencies: [.target(name: name)])
         return [sources]
     }
 
@@ -67,16 +67,16 @@ extension Project {
             dependencies: dependencies
         )
 
-        let testTarget = Target(
-            name: "\(name)Tests",
-            platform: platform,
-            product: .unitTests,
-            bundleId: "retaeded.Job4m",
-            infoPlist: .default,
-            sources: ["Targets/\(name)/Tests/**"],
-            dependencies: [
-                .target(name: "\(name)")
-        ])
+//        let testTarget = Target(
+//            name: "\(name)Tests",
+//            platform: platform,
+//            product: .unitTests,
+//            bundleId: "retaeded.Job4m",
+//            infoPlist: .default,
+//            sources: ["Targets/\(name)/Tests/**"],
+//            dependencies: [
+//                .target(name: "\(name)")
+//        ])
         return [mainTarget]
     }
 }
