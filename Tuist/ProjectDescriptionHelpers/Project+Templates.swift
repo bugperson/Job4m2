@@ -37,7 +37,7 @@ extension Project {
                 sources: ["Targets/\(name)/Tests/**"],
                 resources: [],
                 dependencies: [.target(name: name)])
-        return [sources, tests]
+        return [sources]
     }
 
     /// Helper function to create the application target and the unit test target.
@@ -49,8 +49,12 @@ extension Project {
             "UIMainStoryboardFile": "",
             "UILaunchStoryboardName": "LaunchScreen",
             "CFBundleIdentifier": "retaeded.Job4m",
-            "NSAppTransportSecurity": ["NSAllowsArbitraryLoads": true],
-            ]
+            "NSAppTransportSecurity": [
+                "NSExceptionDomains": [
+                    "job4m-testing.herokuapp": ["NSExceptionAllowsInsecureHTTPLoads": true, "NSIncludesSubdomains": true]
+                ]
+            ],
+        ]
 
         let mainTarget = Target(
             name: name,

@@ -51,13 +51,18 @@ struct APIRoute {
 
 final class APIService {
 
-    static let z = APIService()
+    static let shared = APIService()
 
     private var session = URLSession(configuration: .default)
     private let decoder = JSONDecoder()
+    private let jsonEncoder = JSONEncoder()
 
-    func perform<T: Decodable>(route: APIRoute) async -> T? {
-        let request = makeRequest(from: route)
+    var token: String? {
+        return UserDefaults.standard.token.value
+    }
+
+    func perform<T: Decodable>(route: APIRoute, parameters: Encodable? = nil, queryParameters: Encodable? = nil) async -> T? {
+        let request = makeRequest(from: route, parameters: parameters, queryParameters: queryParameters)
         do {
             let (data, _) = try await session.data(for: request)
             return map(data: data)
@@ -70,10 +75,29 @@ final class APIService {
         return try? decoder.decode(T.self, from: data)
     }
 
-    private func makeRequest(from route: APIRoute) -> URLRequest {
+    private func makeRequest(from route: APIRoute, parameters: Encodable?, queryParameters: Encodable?) -> URLRequest {
         let url = URL(string: "\(Enviroment.urlBase)/\(route.route)")!
         var request = URLRequest(url: url)
+        if let parameters = parameters {
+            request.httpBody = try? jsonEncoder.encode(parameters)
+        }
+
         request.httpMethod = route.method.rawValue
+        if let token = token {
+            request.setValue(token, forHTTPHeaderField: "Authorization: Bearer")
+        }
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        if
+            let queryParameters = queryParameters,
+            let query = try? jsonEncoder.encode(queryParameters),
+            let d = try? JSONSerialization.jsonObject(with: query) as? [String: Any]
+        {
+
+            let q = d.map { k, v in URLQueryItem(name: k, value: "\(v)") }
+
+            request.url?.append(queryItems: q)
+        }
 
         return request
     }
