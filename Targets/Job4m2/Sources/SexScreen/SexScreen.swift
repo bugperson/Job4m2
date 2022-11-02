@@ -7,17 +7,29 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct SexScreen: View {
     @ObservedObject var controller: SexController
 
     var body: some View {
         ZStack {
-            ForEach(controller.cards, id: \.id) { card in
-                CardView(model: card)
-            }
-        }.onAppear {
+            makeCard(with: controller.index + 1)
+            makeCard(with: controller.index)
+        }
+        .padding()
+        .onAppear {
             controller.onAppear()
+        }
+    }
+
+    @ViewBuilder
+    func makeCard(with index: Int) -> some View {
+        if controller.cards.count > 0 {
+            CardView(model: controller.cards[index % controller.cards.count])
+                .id(controller.cards[index % controller.cards.count].id)
+        } else {
+            ProgressView().progressViewStyle(.circular)
         }
     }
 }

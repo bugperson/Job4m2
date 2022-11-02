@@ -9,7 +9,10 @@
 import SwiftUI
 
 struct CardView: View {
-    var model: CardModel
+    @State var model: CardModel
+
+    @State private var offset = CGSize.zero
+    @State private var color: Color = .black
 
     var body: some View {
         AsyncImage(url: URL(string: model.imagePath)) { image in
@@ -36,13 +39,28 @@ struct CardView: View {
                     .frame(alignment: .center)
             }
         }
+        .offset(x: offset.width * 1, y: offset.height * 0.4)
+        .rotationEffect(.degrees(Double(offset.width / 40)))
+        .gesture(
+            DragGesture()
+                .onChanged { gesture in
+                    offset = gesture.translation
+                }
+                .onEnded { _ in
+                    withAnimation {
+                        swipeCard(width: offset.width)
+                        model.swipeAction?()
+                    }
+                }
+        )
     }
 
     var textContent: some View {
         VStack(alignment: .leading) {
             Text(model.title)
                 .foregroundColor(.white)
-                .font(.title)
+                .font(.largeTitle)
+                .fontWeight(.bold)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
@@ -55,8 +73,18 @@ struct CardView: View {
 
             Text(model.description)
                 .foregroundColor(.white)
-                .font(.body)
-                .padding(EdgeInsets(top: 0, leading: 0, bottom: 4, trailing: 0))
+                .font(.title)
+        }
+    }
+
+    func swipeCard(width: CGFloat) {
+        switch width {
+        case -500...(-150):
+            offset = CGSize(width: -500, height: 0)
+        case 150...500:
+            offset = CGSize(width: 500, height: 0)
+        default:
+            offset = .zero
         }
     }
 }

@@ -20,9 +20,9 @@ final class SexCoordinator {
     }
 
     func start() {
-//        let controller = RegistrationController()
-//        let x = CardView(model: CardModel.stub).hosted()
-//        x.modalPresentationStyle = .fullScreen
-//        container.present(x, animated: false)
+        let controller = SexController()
+        let vc = SexScreen(controller: controller).hosted()
+        vc.modalPresentationStyle = .fullScreen
+        container.present(vc, animated: false)
     }
 }

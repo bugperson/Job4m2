@@ -15,14 +15,60 @@ struct CardModel: Identifiable {
     var title: String = ""
     var description: String = ""
     var tags: [TagModel] = []
+    var swipeAction: Action?
 }
 
 extension CardModel {
     static let stub = CardModel(
         id: 1,
         imagePath: "",
-        title: "Jopa, 23",
-        description: "asdfjasj;dlfasl;dkfja;sldkfja;lsdf",
+        title: "Sex 1",
+        description: "Какое-то описание - ваще похуйю",
+        tags: [
+            TagModel(id: 1, text: "Jopa", color: .blue),
+            TagModel(id: 2, text: "Jopa2", color: .lightGreen),
+            TagModel(id: 3, text: "Jopa3", color: .deepBlue),
+            TagModel(id: 4, text: "Jopa4", color: .deepPurple),
+            TagModel(id: 5, text: "Jopa5", color: .purple),
+            TagModel(id: 6, text: "Jopa6", color: .deepGreen)
+        ]
+    )
+
+    static let stub2 = CardModel(
+        id: 2,
+        imagePath: "",
+        title: "Sex 2",
+        description: "Какое-то описание - ваще похуйю",
+        tags: [
+            TagModel(id: 1, text: "Jopa", color: .blue),
+            TagModel(id: 2, text: "Jopa2", color: .lightGreen),
+            TagModel(id: 3, text: "Jopa3", color: .deepBlue),
+            TagModel(id: 4, text: "Jopa4", color: .deepPurple),
+            TagModel(id: 5, text: "Jopa5", color: .purple),
+            TagModel(id: 6, text: "Jopa6", color: .deepGreen)
+        ]
+    )
+
+    static let stub3 = CardModel(
+        id: 3,
+        imagePath: "",
+        title: "Sex 3",
+        description: "Какое-то описание - ваще похуйю",
+        tags: [
+            TagModel(id: 1, text: "Jopa", color: .blue),
+            TagModel(id: 2, text: "Jopa2", color: .lightGreen),
+            TagModel(id: 3, text: "Jopa3", color: .deepBlue),
+            TagModel(id: 4, text: "Jopa4", color: .deepPurple),
+            TagModel(id: 5, text: "Jopa5", color: .purple),
+            TagModel(id: 6, text: "Jopa6", color: .deepGreen)
+        ]
+    )
+
+    static let stub4 = CardModel(
+        id: 4,
+        imagePath: "",
+        title: "Sex 4",
+        description: "Какое-то описание - ваще похуйю",
         tags: [
             TagModel(id: 1, text: "Jopa", color: .blue),
             TagModel(id: 2, text: "Jopa2", color: .lightGreen),
