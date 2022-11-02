@@ -11,7 +11,7 @@ extension Project {
         var targets = makeAppTargets(name: name,
                                      platform: platform,
                                      dependencies: additionalTargets.map { TargetDependency.target(name: $0) })
-        targets += additionalTargets.flatMap({ makeFrameworkTargets(name: $0, platform: platform) })
+        //targets += additionalTargets.flatMap({ makeFrameworkTargets(name: $0, platform: platform) })
         return Project(name: name,
                        organizationName: "retaeded",
                        targets: targets)
@@ -63,8 +63,8 @@ extension Project {
             bundleId: "retaeded.Job4m",
             infoPlist: .extendingDefault(with: infoPlist),
             sources: ["Targets/\(name)/Sources/**"],
-            resources: ["Targets/\(name)/Resources/**"],
-            dependencies: dependencies
+            resources: ["Targets/\(name)/Resources/**"]//,
+//            dependencies: dependencies
         )
 
 //        let testTarget = Target(
