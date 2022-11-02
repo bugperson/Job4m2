@@ -22,8 +22,9 @@ struct CardView: View {
                         .padding()
                 }
         } placeholder: {
-            Rectangle()
-                .foregroundColor(.gray)
+            Job4m2Asset.dog.image.asImage()
+                .resizable()
+                .scaledToFit()
                 .cornerRadius(20)
                 .overlay() {
                     VStack {
@@ -61,3 +62,4 @@ struct CardView_Previews: PreviewProvider {
         CardView(controller: CardController())
     }
 }
+
