@@ -9,10 +9,10 @@
 import SwiftUI
 
 struct CardView: View {
-    @ObservedObject var controller: CardController
+    var model: CardModel
 
     var body: some View {
-        AsyncImage(url: URL(string: controller.imagePath)) { image in
+        AsyncImage(url: URL(string: model.imagePath)) { image in
             image
                 .resizable()
                 .scaledToFit()
@@ -22,44 +22,47 @@ struct CardView: View {
                         .padding()
                 }
         } placeholder: {
-            Job4m2Asset.dog.image.asImage()
-                .resizable()
-                .scaledToFit()
-                .cornerRadius(20)
-                .overlay() {
-                    VStack {
-                        ProgressView()
-                            .progressViewStyle(.circular)
-                            .foregroundColor(.black)
+            ZStack {
+                Job4m2Asset.dog.image.asImage()
+                    .resizable()
+                    .scaledToFit()
+                    .cornerRadius(20)
+                    .overlay(alignment: .bottomLeading) {
                         textContent
-                            .frame(alignment: .bottomLeading)
                             .padding()
                     }
-                }
-        }
-        .onAppear {
-            controller.onAppear()
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .frame(alignment: .center)
+            }
         }
     }
 
     var textContent: some View {
         VStack(alignment: .leading) {
-            Text(controller.title)
+            Text(model.title)
                 .foregroundColor(.white)
                 .font(.title)
 
-            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(model.tags, id: \.id) { tag in
+                        TagView(model: tag)
+                    }
+                }
+            }
+            .padding(EdgeInsets(top: 0, leading: 0, bottom: 4, trailing: 0))
 
-            Text(controller.description)
+            Text(model.description)
                 .foregroundColor(.white)
                 .font(.body)
+                .padding(EdgeInsets(top: 0, leading: 0, bottom: 4, trailing: 0))
         }
     }
 }
 
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
-        CardView(controller: CardController())
+        CardView(model: CardModel.stub)
     }
 }
-

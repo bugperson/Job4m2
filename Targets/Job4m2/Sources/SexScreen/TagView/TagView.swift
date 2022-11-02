@@ -14,6 +14,8 @@ struct TagView: View {
     var body: some View {
         Text(model.text)
             .padding(8)
+            .foregroundColor(.white)
+            .bold()
             .background(
               RoundedRectangle(cornerRadius: 8)
                 .fill(model.color.rawValue)
@@ -24,7 +26,7 @@ struct TagView: View {
 struct TagView_Previews: PreviewProvider {
     static var previews: some View {
         TagView(
-            model: TagModel(id: 1, text: "Tag", color: TagColor.green)
+            model: TagModel(id: 1, text: "Tag", color: TagColor.deepPurple)
         )
     }
 }

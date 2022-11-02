@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct TagModel {
+struct TagModel: Identifiable {
     var id: Int
     var text: String
     var color: TagColor
@@ -24,7 +24,6 @@ enum TagColor {
     case blue
     case purple
     case deepBlue
-    case green
 
     public var rawValue: Color {
         switch self {
@@ -40,8 +39,6 @@ enum TagColor {
             return UIColor(rgb: 0xA45FE6).asColor()
         case .deepBlue:
             return UIColor(rgb: 0x7A8CF0).asColor()
-        case .green:
-            return UIColor(rgb: 0x7BE77E).asColor()
         }
     }
 }

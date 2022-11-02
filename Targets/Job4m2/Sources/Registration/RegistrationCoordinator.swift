@@ -23,7 +23,7 @@ final class RegistrationCoordinator {
     func start() {
         let controller = RegistrationController()
 //        let x = RegistrationView(controller: controller).hosted()
-        let x = CardView(controller: CardController()).hosted()
+        let x = CardView(model: CardModel.stub).hosted()
         x.modalPresentationStyle = .fullScreen
         container.present(x, animated: false)
     }
