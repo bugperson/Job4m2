@@ -14,16 +14,25 @@ extension View {
 final class RegistrationCoordinator {
 
     var onFinishEvent: Action?
-    let container: UIViewController
+    let container: UINavigationController
 
-    init(container: UIViewController) {
+    private var sexCoordinator: SexCoordinator?
+
+    init(container: UINavigationController) {
         self.container = container
     }
 
     func start() {
         let controller = RegistrationController()
+        controller.onFinishEvent = openSexScreen
         let x = RegistrationView(controller: controller).hosted()
         x.modalPresentationStyle = .fullScreen
-        container.present(x, animated: false)
+        container.setViewControllers([x], animated: false)
+    }
+
+    func openSexScreen() {
+        let sexCoordinator = SexCoordinator(container: self.container)
+        sexCoordinator.start()
+        self.sexCoordinator = sexCoordinator
     }
 }

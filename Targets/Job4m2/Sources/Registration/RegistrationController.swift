@@ -1,6 +1,7 @@
 import Foundation
 
 import Foundation
+import SwiftUI
 import CoreMotion
 import Combine
 
@@ -33,6 +34,8 @@ final class RegistrationController: ObservableObject {
 
     private var userParameters: UserRegistrationParameters?
     private var companyParameters: CompanyRegistrationParameters?
+
+    var onFinishEvent: Action?
 
     func onApear() {
         $segmentSelected.sink { value in
@@ -153,6 +156,10 @@ final class RegistrationController: ObservableObject {
 
             guard let superUser = user else { return }
             registrationService.saveUser(superUser)
+
+            await MainActor.run {
+                onFinishEvent?()
+            }
         }
     }
 

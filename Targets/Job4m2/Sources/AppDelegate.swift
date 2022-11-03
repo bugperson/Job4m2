@@ -1,15 +1,5 @@
 import UIKit
 
-struct FeedDTO: Decodable {
-    
-}
-
-class VC: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let route = APIRoute(route: Route.User.feed.asPath, method: .get)
-    }
-}
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

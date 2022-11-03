@@ -13,6 +13,7 @@ struct CardModel: Identifiable {
     var id: Int
     var imagePath: String = ""
     var title: String = ""
+    var subtitile: String = ""
     var description: String = ""
     var tags: [TagModel] = []
     var swipeLikeAction: Action?
@@ -24,6 +25,7 @@ extension CardModel {
         id: 1,
         imagePath: "",
         title: "Sex 1",
+        subtitile: "Sex 2",
         description: "Какое-то описание - ваще похуйю",
         tags: [
             TagModel(id: 1, text: "Jopa", color: .blue),
@@ -39,6 +41,7 @@ extension CardModel {
         id: 2,
         imagePath: "",
         title: "Sex 2",
+        subtitile: "Sex 3",
         description: "Какое-то описание - ваще похуйю",
         tags: [
             TagModel(id: 1, text: "Jopa", color: .blue),
@@ -54,6 +57,7 @@ extension CardModel {
         id: 3,
         imagePath: "",
         title: "Sex 3",
+        subtitile: "Sex 4",
         description: "Какое-то описание - ваще похуйю",
         tags: [
             TagModel(id: 1, text: "Jopa", color: .blue),
@@ -69,6 +73,7 @@ extension CardModel {
         id: 4,
         imagePath: "",
         title: "Sex 4",
+        subtitile: "Sex 5",
         description: "Какое-то описание - ваще похуйю",
         tags: [
             TagModel(id: 1, text: "Jopa", color: .blue),

@@ -3,18 +3,11 @@ import SwiftUI
 
 struct RegistrationView: View {
 
-    
     @ObservedObject var controller: RegistrationController
     typealias LocalStrings = Strings.Registration
 
     var body: some View {
         ZStack {
-//            HStack {
-//                Color.white
-//                Color.black
-//            }
-//            .ignoresSafeArea()
-
             ScrollView {
                 VStack(alignment: .leading) {
                     Picker(

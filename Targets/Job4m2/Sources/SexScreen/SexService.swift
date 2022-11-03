@@ -33,12 +33,17 @@ final class SexService {
                 id: card.id,
                 imagePath: card.pictureUrl,
                 title: card.title,
+                subtitile: card.subtitle,
                 description: card.description,
                 tags: tags,
                 swipeLikeAction: actions.like,
                 swipeDislikeAction: actions.dislike
             )
         }
+    }
+
+    func setLike() {
+        
     }
 }
 

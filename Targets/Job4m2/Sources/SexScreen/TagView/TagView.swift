@@ -15,9 +15,10 @@ struct TagView: View {
         Text(model.text)
             .padding(8)
             .foregroundColor(.white)
-            .bold()
+            .fontWeight(.medium)
+            .font(.system(size: 14))
             .background(
-              RoundedRectangle(cornerRadius: 8)
+              RoundedRectangle(cornerRadius: 12)
                 .fill(model.color.rawValue)
              )
     }

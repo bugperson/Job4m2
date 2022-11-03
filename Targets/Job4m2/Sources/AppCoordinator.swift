@@ -12,7 +12,6 @@ class AppCoordinator {
     private let a = AuthService()
 
     private var registrationCoordinator: RegistrationCoordinator?
-    private var sexCoordinator: SexCoordinator?
 
     init() {
         self.window = UIWindow(frame: UIScreen.main.bounds)
@@ -20,18 +19,20 @@ class AppCoordinator {
     }
 
     func start() {
-//        let registrationCoordinator = RegistrationCoordinator(container: container)
-//        registrationCoordinator.start()
-//        self.registrationCoordinator = registrationCoordinator
+        let registrationCoordinator = RegistrationCoordinator(container: container)
 
-        let sexCoordinator = SexCoordinator(container: container)
-        sexCoordinator.start()
-        self.sexCoordinator = sexCoordinator
+        if a.token != nil { // затычка просто похуй пока что
+            registrationCoordinator.openSexScreen()
+        } else {
+            registrationCoordinator.start()
+            self.registrationCoordinator = registrationCoordinator
+        }
+
     }
 
     private func makeRootViewController(_ vc: UIViewController) {
         window.rootViewController = vc
         window.makeKeyAndVisible()
-        a.auth(parameters: AuthParameters(username: "123", password: "123"))
+//        a.auth(parameters: AuthParameters(username: "123", password: "123"))
     }
 }
