@@ -15,7 +15,8 @@ struct CardModel: Identifiable {
     var title: String = ""
     var description: String = ""
     var tags: [TagModel] = []
-    var swipeAction: Action?
+    var swipeLikeAction: Action?
+    var swipeDislikeAction: Action?
 }
 
 extension CardModel {

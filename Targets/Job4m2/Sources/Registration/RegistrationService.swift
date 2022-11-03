@@ -37,7 +37,7 @@ struct PisyaDTO: Codable {
     
 }
 
-struct TagDTO: Decodable {
+struct TagDTO: Codable {
 
     private enum CodingKeys: String, CodingKey {
 
@@ -56,7 +56,7 @@ struct RegistrationTag: Identifiable {
     let isSelected: Bool
 }
 
-struct TagsDTO: Decodable {
+struct TagsDTO: Codable {
 
     let tags: [TagDTO]
 }

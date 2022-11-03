@@ -72,7 +72,11 @@ final class APIService {
     }
 
     private func map<T: Decodable>(data: Data) -> T? {
-        return try? decoder.decode(T.self, from: data)
+        do {
+            return try decoder.decode(T.self, from: data)
+        } catch {
+            return nil
+        }
     }
 
     private func makeRequest(from route: APIRoute, parameters: Encodable?, queryParameters: Encodable?) -> URLRequest {
@@ -84,7 +88,7 @@ final class APIService {
 
         request.httpMethod = route.method.rawValue
         if let token = token {
-            request.setValue(token, forHTTPHeaderField: "Authorization: Bearer")
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         

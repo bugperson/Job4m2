@@ -49,7 +49,6 @@ struct CardView: View {
                 .onEnded { _ in
                     withAnimation {
                         swipeCard(width: offset.width)
-                        model.swipeAction?()
                     }
                 }
         )
@@ -58,7 +57,7 @@ struct CardView: View {
     var textContent: some View {
         VStack(alignment: .leading) {
             Text(model.title)
-                .foregroundColor(.white)
+                .foregroundColor(.black)
                 .font(.largeTitle)
                 .fontWeight(.bold)
 
@@ -72,7 +71,7 @@ struct CardView: View {
             .padding(EdgeInsets(top: 0, leading: 0, bottom: 4, trailing: 0))
 
             Text(model.description)
-                .foregroundColor(.white)
+                .foregroundColor(.black)
                 .font(.title)
         }
     }
@@ -81,8 +80,10 @@ struct CardView: View {
         switch width {
         case -500...(-150):
             offset = CGSize(width: -500, height: 0)
+            model.swipeDislikeAction?()
         case 150...500:
             offset = CGSize(width: 500, height: 0)
+            model.swipeLikeAction?()
         default:
             offset = .zero
         }

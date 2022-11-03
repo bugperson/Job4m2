@@ -10,27 +10,28 @@ import Foundation
 
 final class SexController: ObservableObject {
     @Published var index: Int = 0
-    @Published var cards: [CardModel] = []
+    @MainActor @Published var cards: [CardModel] = []
+
+    private let sexService = SexService()
 
     func onAppear() {
-        cards = [
-            .stub,
-            .stub2,
-            .stub3,
-            .stub4
-        ]
-        cards = cards.map { card in
-            CardModel(
-                id: card.id,
-                imagePath: card.imagePath,
-                title: card.title,
-                description: card.description,
-                tags: card.tags
-            ) { [weak self] in
-                    self?.index += 1
-                    print(self?.index)
-                    print(card.id)
-                }
+        let likeAction = { [weak self] in
+            self?.index += 1
+            print(self?.index)
+        }
+
+        let dislikeAction = { [weak self] in
+            self?.index += 1
+            print(self?.index)
+        }
+
+        Task {
+            let fetchedCards = await sexService.fetchCards(with: (likeAction, dislikeAction))
+
+            await MainActor.run { [fetchedCards] in
+                cards = fetchedCards
+                print(cards)
+            }
         }
     }
 }

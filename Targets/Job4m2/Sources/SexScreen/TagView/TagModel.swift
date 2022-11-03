@@ -41,4 +41,15 @@ enum TagColor {
             return UIColor(rgb: 0x7A8CF0).asColor()
         }
     }
+
+    public static var randomColor: TagColor {
+        [
+            TagColor.deepGreen,
+            TagColor.deepPurple,
+            TagColor.lightGreen,
+            TagColor.blue,
+            TagColor.purple,
+            TagColor.deepBlue
+        ].randomElement()!
+    }
 }
