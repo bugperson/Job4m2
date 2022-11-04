@@ -10,14 +10,15 @@ import Foundation
 import SwiftUI
 
 struct CardModel: Identifiable {
+    typealias SwipeAction = (Int, CardActionType) -> Void
+
     var id: Int
     var imagePath: String = ""
     var title: String = ""
     var subtitile: String = ""
     var description: String = ""
     var tags: [TagModel] = []
-    var swipeLikeAction: Action?
-    var swipeDislikeAction: Action?
+    var swipeAction: SwipeAction?
 }
 
 extension CardModel {

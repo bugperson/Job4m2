@@ -89,7 +89,6 @@ final class APIService {
         request.httpMethod = route.method.rawValue
         if let token = token {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-//            request.setValue("Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzMyIsImV4cCI6MTY2NzUxNjc2NX0.szaSxe3kttbMedDJ-35I_uRKFwSkWnp8IFwHVhqsSmQ", forHTTPHeaderField: "Authorization")
 
         }
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

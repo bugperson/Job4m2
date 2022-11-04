@@ -22,8 +22,6 @@ final class AuthService {
             else { return }
 
             saveToken(token)
-
-            
         }
     }
 

@@ -12,7 +12,7 @@ final class SexService {
     private let apiService = APIService.shared
 
     func fetchCards(
-        with actions: (like: Action?, dislike: Action?)
+        with action: CardModel.SwipeAction?
     ) async -> [CardModel] {
         let route = APIRoute(
             route: Route.User.feed.asPath,
@@ -36,14 +36,15 @@ final class SexService {
                 subtitile: card.subtitle,
                 description: card.description,
                 tags: tags,
-                swipeLikeAction: actions.like,
-                swipeDislikeAction: actions.dislike
+                swipeAction: action
             )
         }
     }
 
-    func setLike() {
-        
+    func sendCardAcion(with cardId: Int, actionType: CardActionType) async -> PisyaDTO? {
+        let route = APIRoute(route: Route.User.cardAction.asPath, method: .post)
+        let parameters = CardAction(id: cardId, action: actionType.rawValue)
+        return await apiService.perform(route: route, parameters: parameters)
     }
 }
 
@@ -74,4 +75,33 @@ struct CardDTO: Codable {
 struct Attachments: Codable {
     let url: String
     let name: String
+}
+
+struct CardAction: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case id = "cid"
+        case action
+    }
+
+    let id: Int
+    let action: String
+}
+
+enum CardActionType: String {
+    case like
+    case dislike
+    case report
+}
+
+extension CardActionType {
+    func toAlertType() -> AlertType {
+        switch self {
+        case .like:
+            return .like
+        case .dislike:
+            return .dislike
+        case .report:
+            return .report
+        }
+    }
 }

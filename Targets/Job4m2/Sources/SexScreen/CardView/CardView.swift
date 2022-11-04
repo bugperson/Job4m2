@@ -12,8 +12,7 @@ struct CardView: View {
     @State var model: CardModel
 
     @State private var offset = CGSize.zero
-    @State private var color: Color = .black
-    @State private var backgroundOpacity: CGFloat = 1
+    @State private var backgroundOpacity = 1.0
 
     var body: some View {
         ZStack (alignment: .topLeading) {
@@ -22,11 +21,11 @@ struct CardView: View {
 
             VStack {
                 image
+                    .opacity(backgroundOpacity)
 
                 textContent
                     .padding()
             }
-            .opacity(backgroundOpacity)
         }
         .clipShape(RoundedRectangle(cornerRadius: 40))
         .frame(width: 361, height: 662, alignment: .center)
@@ -37,6 +36,14 @@ struct CardView: View {
             DragGesture()
                 .onChanged { gesture in
                     offset = gesture.translation
+                    withAnimation {
+                        let value = UIScreen.main.bounds.width
+                        if gesture.translation.width > 0 {
+                            backgroundOpacity = 1 - gesture.translation.width / value
+                        } else {
+                            backgroundOpacity = 1 + gesture.translation.width / value
+                        }
+                    }
                     print(gesture.translation.width)
                     print(backgroundOpacity)
                 }
@@ -52,7 +59,8 @@ struct CardView: View {
         AsyncImage(url: URL(string: model.imagePath)) { image in
             image
                 .resizable()
-                .scaledToFit()
+                .frame(width: 361, height: 467, alignment: .top)
+                .scaledToFill()
                 .cornerRadius(40)
         } placeholder: {
             ZStack {
@@ -60,12 +68,12 @@ struct CardView: View {
                     .resizable()
                     .scaledToFill()
                     .cornerRadius(40)
+                    .frame(width: 361, height: 467, alignment: .top)
                 ProgressView()
                     .progressViewStyle(.circular)
                     .frame(alignment: .center)
             }
         }
-        .frame(width: 361, height: 467, alignment: .top)
     }
 
     var textContent: some View {
@@ -100,19 +108,18 @@ struct CardView: View {
         switch width {
         case -500...(-150):
             withAnimation {
-                backgroundOpacity = backgroundOpacity + width / 250
                 offset = CGSize(width: -500, height: 0)
             }
-            model.swipeDislikeAction?()
+            model.swipeAction?(model.id, .dislike)
         case 150...500:
             withAnimation {
-                backgroundOpacity = backgroundOpacity - width / 250
                 offset = CGSize(width: 500, height: 0)
             }
-            model.swipeLikeAction?()
+            model.swipeAction?(model.id, .like)
         default:
             withAnimation {
                 offset = .zero
+                backgroundOpacity = 1
             }
         }
     }
@@ -127,3 +134,4 @@ struct CardView_Previews: PreviewProvider {
 struct CardColors {
     static let cardBackGround = UIColor(rgb: 0x292935).asColor()
 }
+

@@ -7,26 +7,37 @@
 //
 
 import Foundation
+import Combine
 
 final class SexController: ObservableObject {
     @Published var index: Int = 0
+    @Published var isAlertPresented = false
+    @Published var alertType: AlertType = .like
+
     @MainActor @Published var cards: [CardModel] = []
 
     private let sexService = SexService()
 
     func onAppear() {
-        let likeAction = { [weak self] in
-            self?.index += 1
-            print(self?.index)
-        }
+        let action: CardModel.SwipeAction = { [weak self] id, actionType in
+            guard let self else { return }
+            Task {
+                let _ = await self.sexService.sendCardAcion(with: id, actionType: actionType)
 
-        let dislikeAction = { [weak self] in
-            self?.index += 1
-            print(self?.index)
+                await MainActor.run {
+                    self.index += 1
+                    self.alertType = actionType.toAlertType()
+                    self.isAlertPresented = true
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.isAlertPresented = false
+                    }
+                }
+            }
         }
 
         Task {
-            let fetchedCards = await sexService.fetchCards(with: (likeAction, dislikeAction))
+            let fetchedCards = await sexService.fetchCards(with: action)
 
             await MainActor.run { [fetchedCards] in
                 cards = fetchedCards
@@ -35,3 +46,4 @@ final class SexController: ObservableObject {
         }
     }
 }
+

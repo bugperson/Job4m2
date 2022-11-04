@@ -21,6 +21,7 @@ struct SexScreen: View {
         .onAppear {
             controller.onAppear()
         }
+        .alert(alertType: $controller.alertType, isPresented: $controller.isAlertPresented)
     }
 
     @ViewBuilder
