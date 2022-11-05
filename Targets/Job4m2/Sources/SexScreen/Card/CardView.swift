@@ -14,14 +14,21 @@ struct CardView: View {
     @State private var offset = CGSize.zero
     @State private var backgroundOpacity = 1.0
 
+    @State private var alertOpacity = 0.0
+    @State private var alertType: AlertType = .none
+
     var body: some View {
         ZStack (alignment: .topLeading) {
             Rectangle()
                 .foregroundColor(CardColors.cardBackGround)
 
             VStack {
-                image
-                    .opacity(backgroundOpacity)
+                ZStack(alignment: .center) {
+                    image
+                        .opacity(backgroundOpacity)
+//                    AlertView(alertType: $alertType)
+//                        .opacity(alertOpacity)
+                }
 
                 textContent
                     .padding()
@@ -40,12 +47,14 @@ struct CardView: View {
                         let value = UIScreen.main.bounds.width
                         if gesture.translation.width > 0 {
                             backgroundOpacity = 1 - gesture.translation.width / value
+                            alertOpacity = gesture.translation.width / value * 4
+                            alertType = .like
                         } else {
                             backgroundOpacity = 1 + gesture.translation.width / value
+                            alertOpacity = gesture.translation.width / value * -4
+                            alertType = .dislike
                         }
                     }
-                    print(gesture.translation.width)
-                    print(backgroundOpacity)
                 }
                 .onEnded { _ in
                     withAnimation {
@@ -56,7 +65,7 @@ struct CardView: View {
     }
 
     var image: some View {
-        AsyncImage(url: URL(string: model.imagePath)) { image in
+        CachedAsyncImage(url: URL(string: model.imagePath)) { image in
             image
                 .resizable()
                 .frame(width: 361, height: 467, alignment: .top)
@@ -120,6 +129,8 @@ struct CardView: View {
             withAnimation {
                 offset = .zero
                 backgroundOpacity = 1
+                alertOpacity = 0
+                alertType = .none
             }
         }
     }
@@ -134,4 +145,3 @@ struct CardView_Previews: PreviewProvider {
 struct CardColors {
     static let cardBackGround = UIColor(rgb: 0x292935).asColor()
 }
-

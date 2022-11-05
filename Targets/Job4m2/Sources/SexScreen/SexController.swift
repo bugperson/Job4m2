@@ -29,7 +29,7 @@ final class SexController: ObservableObject {
                     self.alertType = actionType.toAlertType()
                     self.isAlertPresented = true
 
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         self.isAlertPresented = false
                     }
                 }

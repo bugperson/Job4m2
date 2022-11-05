@@ -42,9 +42,12 @@ final class SexService {
     }
 
     func sendCardAcion(with cardId: Int, actionType: CardActionType) async -> PisyaDTO? {
-        let route = APIRoute(route: Route.User.cardAction.asPath, method: .post)
-        let parameters = CardAction(id: cardId, action: actionType.rawValue)
-        return await apiService.perform(route: route, parameters: parameters)
+//        let route = APIRoute(route: Route.User.cardAction.asPath, method: .post)
+//        let parameters = CardAction(id: cardId, action: actionType.rawValue)
+//        return await apiService.perform(route: route, parameters: parameters)
+
+//        Включить, когда будем показывать преподу
+        return nil
     }
 }
 

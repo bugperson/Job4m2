@@ -32,7 +32,7 @@ class AppCoordinator {
     private func makeRootViewController(_ vc: UIViewController) {
         window.rootViewController = vc
         window.makeKeyAndVisible()
-        a.auth(parameters: AuthParameters(username: "123", password: "123"))
+        a.auth(parameters: AuthParameters(username: "Test", password: "Test"))
 //        a.refreshToken()
     }
 }
