@@ -61,8 +61,16 @@ final class APIService {
         return UserDefaults.standard.token.value
     }
 
-    func perform<T: Decodable>(route: APIRoute, parameters: Encodable? = nil, queryParameters: Encodable? = nil) async -> T? {
-        let request = makeRequest(from: route, parameters: parameters, queryParameters: queryParameters)
+    func perform<T: Decodable>(
+        route: APIRoute,
+        parameters: Encodable? = nil,
+        queryParameters: Encodable? = nil
+    ) async -> T? {
+        let request = makeRequest(
+            from: route,
+            parameters: parameters,
+            queryParameters: queryParameters
+        )
         do {
             let (data, _) = try await session.data(for: request)
             return map(data: data)
@@ -79,7 +87,11 @@ final class APIService {
         }
     }
 
-    private func makeRequest(from route: APIRoute, parameters: Encodable?, queryParameters: Encodable?) -> URLRequest {
+    private func makeRequest(
+        from route: APIRoute,
+        parameters: Encodable?,
+        queryParameters: Encodable?
+    ) -> URLRequest {
         let url = URL(string: "\(Enviroment.urlBase)/\(route.route)")!
         var request = URLRequest(url: url)
         if let parameters = parameters {
@@ -89,7 +101,6 @@ final class APIService {
         request.httpMethod = route.method.rawValue
         if let token = token {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
         }
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
@@ -105,5 +116,30 @@ final class APIService {
         }
 
         return request
+    }
+
+    func uploadPhoto<T: Decodable>(
+        route: APIRoute,
+        data: Data,
+        bodyBoundary: String
+    ) async -> T? {
+        guard let token else { return nil }
+
+        let url = URL(string: "\(Enviroment.urlBase)/\(route.route)")!
+        var request = URLRequest(url: url)
+
+        request.httpMethod = route.method.rawValue
+
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("multipart/form-data; boundary=\(bodyBoundary)", forHTTPHeaderField: "Content-Type")
+        request.setValue("\(data.count)", forHTTPHeaderField: "content-length")
+        request.httpBody = data
+
+        do {
+            let (data, _) = try await session.data(for: request)
+            return map(data: data)
+        } catch {
+            return nil
+        }
     }
 }

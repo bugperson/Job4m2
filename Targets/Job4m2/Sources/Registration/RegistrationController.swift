@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import CoreMotion
 import Combine
+import PhotosUI
 
 enum UserType {
 
@@ -26,6 +27,9 @@ final class RegistrationController: ObservableObject {
     @Published var userType: UserType = .workDealer
     @Published var isAllFiled: Bool = false
     @MainActor @Published var tags: [RegistrationTag] = []
+
+    @Published var photos: [PhotosPickerItem] = []
+    @Published var photoData: Data?
 
     var disposable = Set<AnyCancellable>()
 
@@ -157,8 +161,31 @@ final class RegistrationController: ObservableObject {
             guard let superUser = user else { return }
             registrationService.saveUser(superUser)
 
+            if let photoData = self.photoData {
+                let _ = await registrationService.uploadPhoto(data: photoData)
+            }
+
             await MainActor.run {
                 onFinishEvent?()
+            }
+        }
+    }
+
+    func updatePhoto() {
+        guard let image = photos.first else { return }
+        image.loadTransferable(type: Data.self) { result in
+            switch result {
+            case .success(let data):
+                if let data {
+                    Task {
+                        await MainActor.run {
+                            self.photoData = data
+                        }
+                    }
+                }
+            case .failure(let failure):
+                fatalError()
+                print(failure.localizedDescription)
             }
         }
     }

@@ -20,19 +20,19 @@ class AppCoordinator {
 
     func start() {
         let registrationCoordinator = RegistrationCoordinator(container: container)
-
-        if a.token != nil { // затычка просто похуй пока что
-            registrationCoordinator.openSexScreen()
-        } else {
-            registrationCoordinator.start()
-            self.registrationCoordinator = registrationCoordinator
-        }
+        registrationCoordinator.start()
+//        if a.token != nil { // затычка просто похуй пока что
+//            registrationCoordinator.openSexScreen()
+//        } else {
+//            registrationCoordinator.start()
+//            self.registrationCoordinator = registrationCoordinator
+//        }
     }
 
     private func makeRootViewController(_ vc: UIViewController) {
         window.rootViewController = vc
         window.makeKeyAndVisible()
-        a.auth(parameters: AuthParameters(username: "Test", password: "Test"))
+//        a.auth(parameters: AuthParameters(username: "Test", password: "Test"))
 //        a.refreshToken()
     }
 }

@@ -8,9 +8,12 @@ struct User: Codable {
 
 final class AuthService {
 
-
     var token: String? {
         return UserDefaults.standard.token.value
+    }
+
+    var user: User? {
+        return UserDefaults.standard.user.value
     }
 
     private let apiService = APIService.shared
@@ -22,6 +25,7 @@ final class AuthService {
             else { return }
 
             saveToken(token)
+            saveUser(User(username: parameters.username, password: parameters.password))
         }
     }
 
@@ -45,6 +49,10 @@ final class AuthService {
 
     private func saveToken(_ token: String) {
         UserDefaults.standard.token.value = token
+    }
+
+    func saveUser(_ user: User) {
+        UserDefaults.standard.user.value = user
     }
 }
 

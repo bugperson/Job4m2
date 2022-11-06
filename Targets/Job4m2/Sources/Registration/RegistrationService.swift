@@ -75,6 +75,13 @@ final class RegistrationService {
         return await apiService.perform(route: route, parameters: parameters)
     }
 
+    func uploadPhoto(data: Data) async -> PisyaDTO? {
+        let route  = APIRoute(route: Route.Register.uploadProfilePictures.asPath, method: .post)
+        let bodyBoundary = UUID().uuidString
+        let requestData = createRequestBody(imageData: data, boundary: bodyBoundary)
+        return await apiService.uploadPhoto(route: route, data: requestData, bodyBoundary: bodyBoundary)
+    }
+
     func saveUser(_ user: User) {
         UserDefaults.standard.user.value = user
     }
@@ -98,4 +105,30 @@ final class RegistrationService {
 extension UserDefaults {
 
     var user: KeyValueContainer<User> { make() }
+}
+
+fileprivate func createRequestBody(
+    imageData: Data,
+    boundary: String
+) -> Data {
+    let lineBreak = "\r\n"
+    let attachmentKey = ""
+    let fileName = ""
+    var requestBody = Data()
+
+    requestBody.append("\(lineBreak)--\(boundary + lineBreak)")
+    requestBody.append("Content-Disposition: form-data; name=\"\(attachmentKey)\"; filename=\"\(fileName)\"\(lineBreak)")
+    requestBody.append("Content-Type: image/jpeg \(lineBreak + lineBreak)")
+    requestBody.append(imageData)
+    requestBody.append("\(lineBreak)--\(boundary)--\(lineBreak)")
+
+    return requestBody
+}
+
+extension Data {
+    mutating func append(_ string: String) {
+        if let data = string.data(using: .utf8) {
+            append(data)
+        }
+    }
 }

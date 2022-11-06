@@ -17,50 +17,37 @@ struct CardView: View {
     @State private var alertOpacity = 0.0
     @State private var alertType: AlertType = .none
 
+    @State var isAlertOnCardEnabled = false
+
     var body: some View {
         ZStack (alignment: .topLeading) {
             Rectangle()
                 .foregroundColor(CardColors.cardBackGround)
 
             VStack {
-                ZStack(alignment: .center) {
+                if isAlertOnCardEnabled {
+                    ZStack(alignment: .center) {
+                        image
+                            .opacity(backgroundOpacity)
+                        AlertView(alertType: $alertType)
+                            .opacity(alertOpacity)
+                    }
+                } else {
                     image
                         .opacity(backgroundOpacity)
-//                    AlertView(alertType: $alertType)
-//                        .opacity(alertOpacity)
                 }
 
                 textContent
                     .padding()
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 40))
         .frame(width: 361, height: 662, alignment: .center)
+        .clipShape(RoundedRectangle(cornerRadius: 40))
         .shadow(radius: 10)
         .offset(x: offset.width * 1, y: offset.height * 0.4)
         .rotationEffect(.degrees(Double(offset.width / 40)))
         .gesture(
-            DragGesture()
-                .onChanged { gesture in
-                    offset = gesture.translation
-                    withAnimation {
-                        let value = UIScreen.main.bounds.width
-                        if gesture.translation.width > 0 {
-                            backgroundOpacity = 1 - gesture.translation.width / value
-                            alertOpacity = gesture.translation.width / value * 4
-                            alertType = .like
-                        } else {
-                            backgroundOpacity = 1 + gesture.translation.width / value
-                            alertOpacity = gesture.translation.width / value * -4
-                            alertType = .dislike
-                        }
-                    }
-                }
-                .onEnded { _ in
-                    withAnimation {
-                        swipeCard(width: offset.width)
-                    }
-                }
+            dragCardGesture
         )
     }
 
@@ -68,16 +55,16 @@ struct CardView: View {
         CachedAsyncImage(url: URL(string: model.imagePath)) { image in
             image
                 .resizable()
-                .frame(width: 361, height: 467, alignment: .top)
-                .scaledToFill()
+                .aspectRatio(CGSize(width: 361, height: 467), contentMode: .fit)
+                .frame(alignment: .top)
                 .cornerRadius(40)
         } placeholder: {
             ZStack {
                 Job4m2Asset.dog.image.asImage()
                     .resizable()
-                    .scaledToFill()
+                    .aspectRatio(CGSize(width: 361, height: 467), contentMode: .fit)
+                    .frame(alignment: .top)
                     .cornerRadius(40)
-                    .frame(width: 361, height: 467, alignment: .top)
                 ProgressView()
                     .progressViewStyle(.circular)
                     .frame(alignment: .center)
@@ -111,6 +98,30 @@ struct CardView: View {
             }
             .padding(EdgeInsets(top: 0, leading: 0, bottom: 4, trailing: 0))
         }
+    }
+
+    var dragCardGesture: some Gesture {
+        DragGesture()
+            .onChanged { gesture in
+                offset = gesture.translation
+                withAnimation {
+                    let value = UIScreen.main.bounds.width
+                    if gesture.translation.width > 0 {
+                        backgroundOpacity = 1 - gesture.translation.width / value
+                        alertOpacity = gesture.translation.width / value * 4
+                        alertType = .like
+                    } else {
+                        backgroundOpacity = 1 + gesture.translation.width / value
+                        alertOpacity = gesture.translation.width / value * -4
+                        alertType = .dislike
+                    }
+                }
+            }
+            .onEnded { _ in
+                withAnimation {
+                    swipeCard(width: offset.width)
+                }
+            }
     }
 
     func swipeCard(width: CGFloat) {
