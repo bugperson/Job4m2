@@ -160,6 +160,7 @@ final class RegistrationController: ObservableObject {
             registrationService.saveUser(superUser)
 
             if let photoData = self.photoData {
+//                let imageData = UIImage(data: photoData)?.jpegData(compressionQuality: 1)!
                 let _ = await registrationService.uploadPhoto(data: photoData)
             }
 

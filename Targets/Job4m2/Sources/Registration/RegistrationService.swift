@@ -111,8 +111,8 @@ fileprivate func createRequestBody(
     boundary: String
 ) -> Data {
     let lineBreak = "\r\n"
-    let attachmentKey = ""
-    let fileName = ""
+    let attachmentKey = "file"
+    let fileName = "asd"
     var requestBody = Data()
 
     requestBody.append("\(lineBreak)--\(boundary + lineBreak)")
@@ -131,3 +131,8 @@ extension Data {
         }
     }
 }
+//--------------------------608af828d2f89446
+//Content-Disposition: form-data; name="file"; filename="2022-10-1
+//3 17.44.09.jpg"
+//007d: Content-Type: image/jpeg
+//0097:
