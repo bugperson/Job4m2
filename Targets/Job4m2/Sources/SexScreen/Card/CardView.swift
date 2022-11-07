@@ -55,15 +55,15 @@ struct CardView: View {
         CachedAsyncImage(url: URL(string: model.imagePath)) { image in
             image
                 .resizable()
-                .aspectRatio(CGSize(width: 361, height: 467), contentMode: .fit)
-                .frame(alignment: .top)
+                .scaledToFill()
+                .frame(width: 361, height: 467, alignment: .top)
                 .cornerRadius(40)
         } placeholder: {
             ZStack {
-                Job4m2Asset.dog.image.asImage()
+                Job4m2Asset.dog.image.asImage() // Сделать норм картинку
                     .resizable()
-                    .aspectRatio(CGSize(width: 361, height: 467), contentMode: .fit)
-                    .frame(alignment: .top)
+                    .scaledToFill()
+                    .frame(width: 361, height: 467, alignment: .top)
                     .cornerRadius(40)
                 ProgressView()
                     .progressViewStyle(.circular)
