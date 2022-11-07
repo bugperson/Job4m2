@@ -12,16 +12,16 @@ import UIKit
 final class LikesCoordinator {
 
     var onFinishEvent: Action?
-    let container: UINavigationController
+    let container: UIViewController
 
-    init(container: UINavigationController) {
+    init(container: UIViewController) {
         self.container = container
     }
 
     func start() {
         let controller = LikesController()
-        let x = LikesView(controller: controller).hosted()
-        x.modalPresentationStyle = .formSheet
-        container.setViewControllers([x], animated: false)
+        let vc = LikesView(controller: controller).hosted()
+//        vc.modalPresentationStyle = .formSheet
+        container.present(vc, animated: false)
     }
 }

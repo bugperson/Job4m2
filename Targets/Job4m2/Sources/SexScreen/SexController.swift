@@ -18,6 +18,10 @@ final class SexController: ObservableObject {
 
     private let sexService = SexService()
 
+    var openProfileSettings: Action?
+    var openLikes: Action?
+    var exit: Action?
+
     func onAppear() {
         let action: CardModel.SwipeAction = { [weak self] id, actionType in
             guard let self else { return }
