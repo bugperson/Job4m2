@@ -1,7 +1,5 @@
 import Foundation
 
-
-
 enum UserTypeDTO: String, Encodable {
 
     case candidate
