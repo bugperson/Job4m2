@@ -93,6 +93,7 @@ struct TimerView: View {
                 }
             }
             Button {
+                timeRemaining = 5
                 comletion()
             } label: {
                 RoundedRectangle(cornerRadius: 12)
