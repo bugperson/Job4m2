@@ -24,12 +24,12 @@ enum UserTypeDTO: String, Encodable {
 struct CompanyRegistrationParameters: Encodable {
     let username: String
     let password: String
-    let name: String
     let description: String
     let tg_link: String
     let type: UserTypeDTO
     let tags: [Int]
     let attachments: [PisyaDTO] = []
+    let company: String
 }
 
 struct PisyaDTO: Codable {
