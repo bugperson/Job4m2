@@ -90,8 +90,29 @@ struct RegistrationView: View {
 
     var tags: some View {
         ScrollView(.horizontal) {
-            LazyHGrid(rows: [GridItem(.flexible()), GridItem(.flexible())], spacing: 5) {
-                ForEach(controller.tags) { tag in
+            let first = Array(controller.tags[0 ..< controller.tags.count / 2])
+            let sec = Array(controller.tags[controller.tags.count / 2 ..< controller.tags.count])
+
+            LazyHGrid(rows: [GridItem(.flexible())]) {
+                ForEach(first) { tag in
+                    Text(tag.text)
+                        .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+                        .animation(nil, value: tag.id)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(.gray, lineWidth: 1)
+                                .background(tag.isSelected ? Color.brown : Color.clear)
+                                .animation(nil, value: tag.id)
+                        )
+                        .cornerRadius(8)
+                        .onTapGesture {
+                            controller.onTagSelected(tagID: tag.id)
+                        }
+                        .animation(nil, value: tag.id)
+                }
+            }
+            LazyHGrid(rows: [GridItem(.flexible())]) {
+                ForEach(sec) { tag in
                     Text(tag.text)
                         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                         .animation(nil, value: tag.id)
