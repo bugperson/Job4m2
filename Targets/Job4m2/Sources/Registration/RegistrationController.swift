@@ -58,13 +58,12 @@ final class RegistrationController: ObservableObject {
             .combineLatest($telegrammName)
             .combineLatest($slider)
             .combineLatest($description)
-            .combineLatest($company)
             .combineLatest($userType)
             .combineLatest($tags)
             .sink { result in
-                let (((((((((nick, name), pass), education), telegram), slider), description), company), _), tags) = result
+                let ((((((((nick, name), pass), education), telegram), slider), description), _), tags) = result
                 
-                let fields: [String] = [nick, name, education, telegram, description, pass, company]
+                let fields: [String] = [nick, name, education, telegram, description, pass]
                 guard fields.allSatisfy({ !$0.isEmpty }) else {
                     self.isAllFiled = false
                     return
@@ -76,7 +75,6 @@ final class RegistrationController: ObservableObject {
                     name: name,
                     age: Int(slider),
                     education: education,
-                    company: company,
                     description: description,
                     tg_link: telegram,
                     type: .candidate,

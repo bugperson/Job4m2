@@ -8,7 +8,6 @@ struct UserRegistrationParameters: Encodable {
     let name: String
     let age: Int
     let education: String
-    let company: String
     let description: String
     let tg_link: String
     let type: UserTypeDTO

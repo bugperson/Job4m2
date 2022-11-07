@@ -15,8 +15,8 @@ struct RegistrationView: View {
                         "Вы: ",
                         selection: $controller.segmentSelected
                     ) {
-                        Text("При бабках").tag(0)
-                        Text("Без бабок").tag(1)
+                        Text("Рекрутер").tag(0)
+                        Text("Кандидат").tag(1)
                     }
                     .pickerStyle(.segmented)
 
@@ -139,13 +139,13 @@ struct RegistrationView: View {
                 .transition(.slide)
                 .animation(.easeInOut(duration: Constants.animationDuration))
 
-            TextField(
-                LocalStrings.company,
-                text: $controller.company
-            )
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .transition(.slide)
-            .animation(.easeInOut(duration: Constants.animationDuration))
+//            TextField(
+//                LocalStrings.company,
+//                text: $controller.company
+//            )
+//            .textFieldStyle(RoundedBorderTextFieldStyle())
+//            .transition(.slide)
+//            .animation(.easeInOut(duration: Constants.animationDuration))
         }
         .animation(.easeInOut(duration: Constants.animationDuration))
     }
