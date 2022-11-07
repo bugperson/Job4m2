@@ -1,16 +1,8 @@
 import Foundation
-
-import Foundation
 import SwiftUI
 import CoreMotion
 import Combine
 import PhotosUI
-
-enum UserType {
-
-    case workFinder
-    case workDealer
-}
 
 final class RegistrationController: ObservableObject {
 
@@ -39,7 +31,7 @@ final class RegistrationController: ObservableObject {
     private var userParameters: UserRegistrationParameters?
     private var companyParameters: CompanyRegistrationParameters?
 
-    var onFinishEvent: Action?
+    var onRegistrationFinish: Action?
 
     func onApear() {
         $segmentSelected.sink { value in
@@ -160,12 +152,11 @@ final class RegistrationController: ObservableObject {
             registrationService.saveUser(superUser)
 
             if let photoData = self.photoData {
-//                let imageData = UIImage(data: photoData)?.jpegData(compressionQuality: 1)!
                 let _ = await registrationService.uploadPhoto(data: photoData)
             }
 
             await MainActor.run {
-                onFinishEvent?()
+                onRegistrationFinish?()
             }
         }
     }

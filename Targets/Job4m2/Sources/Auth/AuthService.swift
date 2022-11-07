@@ -16,6 +16,8 @@ final class AuthService {
         return UserDefaults.standard.user.value
     }
 
+    var isLoggedIn: Bool { user != nil }
+
     private let apiService = APIService.shared
 
     func auth(parameters: AuthParameters) {
@@ -29,8 +31,14 @@ final class AuthService {
         }
     }
 
+    func logout() {
+        saveUser(nil)
+        saveToken(nil)
+    }
+
     func refreshToken() {
         guard let user = UserDefaults.standard.user.value else { return }
+
         Task {
             let parameters = AuthParameters(
                 username: user.username,
@@ -47,11 +55,11 @@ final class AuthService {
         return authDTO?.token
     }
 
-    private func saveToken(_ token: String) {
+    private func saveToken(_ token: String?) {
         UserDefaults.standard.token.value = token
     }
 
-    func saveUser(_ user: User) {
+    private func saveUser(_ user: User?) {
         UserDefaults.standard.user.value = user
     }
 }
