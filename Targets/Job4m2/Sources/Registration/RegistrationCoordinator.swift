@@ -16,23 +16,19 @@ final class RegistrationCoordinator {
     var onFinishEvent: Action?
     let container: UINavigationController
 
-    private var sexCoordinator: SexCoordinator?
-
     init(container: UINavigationController) {
         self.container = container
     }
 
     func start() {
         let controller = RegistrationController()
-        controller.onFinishEvent = openSexScreen
-        let x = RegistrationView(controller: controller).hosted()
-        x.modalPresentationStyle = .fullScreen
-        container.setViewControllers([x], animated: false)
-    }
+        let hostedController = RegistrationView(controller: controller).hosted()
 
-    func openSexScreen() {
-        let sexCoordinator = SexCoordinator(container: self.container)
-        sexCoordinator.start()
-        self.sexCoordinator = sexCoordinator
+        hostedController.modalPresentationStyle = .fullScreen
+        container.setViewControllers([hostedController], animated: false)
+        controller.onRegistrationFinish = {
+            print("hui")
+            self.onFinishEvent?()
+        }
     }
 }
