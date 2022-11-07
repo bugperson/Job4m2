@@ -97,13 +97,13 @@ final class RegistrationController: ObservableObject {
                 self.companyParameters = CompanyRegistrationParameters(
                     username: nick,
                     password: pass,
-                    name: companyName,
                     description: description,
                     tg_link: telegram,
                     type: .recruiter,
                     tags: tags
                         .filter { $0.isSelected }
-                        .map { $0.id }
+                        .map { $0.id },
+                    company: companyName
                 )
 
             }
