@@ -60,7 +60,7 @@ struct CardView: View {
                 .cornerRadius(40)
         } placeholder: {
             ZStack {
-                Job4m2Asset.dog.image.asImage() // Сделать норм картинку
+                Job4m2Asset.defaultphoto.image.asImage() // Сделать норм картинку
                     .resizable()
                     .scaledToFill()
                     .frame(width: 361, height: 467, alignment: .top)
