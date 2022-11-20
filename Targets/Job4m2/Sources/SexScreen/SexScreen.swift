@@ -15,36 +15,8 @@ struct SexScreen: View {
     var body: some View {
         VStack {
             if controller.cards.count > 0 {
-                HStack() {
-                    Button {
-                        controller.exit?()
-                    } label: {
-                        Image(systemName: "rectangle.portrait.and.arrow.forward")
-                            .font(.system(size: 32))
-                            .foregroundColor(.red)
-                    }
-
-                    Spacer()
-
-                    Button {
-                        controller.openProfileSettings?()
-                    } label: {
-                        Image(systemName: "person.crop.circle.fill")
-                            .font(.system(size: 32))
-                            .foregroundColor(.gray)
-                    }
-
-                    Spacer()
-
-                    Button {
-                        controller.openLikes?()
-                    } label: {
-                        Image(systemName: "heart.fill")
-                            .foregroundColor(.red)
-                            .font(.system(size: 32))
-                    }
-                }
-                .padding()
+                buttons
+                    .padding()
             }
             ZStack {
                 makeCard(with: controller.index + 1)
@@ -60,12 +32,44 @@ struct SexScreen: View {
 
     @ViewBuilder
     func makeCard(with index: Int) -> some View {
-        if controller.cards.count > 0 {
+        if controller.cards.count < 0 {
             CardView(model: controller.cards[index % controller.cards.count])
                 .id(controller.cards[index % controller.cards.count].id)
         } else {
             TimerView {
                 controller.onAppear()
+            }
+        }
+    }
+    
+    var buttons: some View {
+        HStack() {
+            Button {
+                controller.exit?()
+            } label: {
+                Image(systemName: "rectangle.portrait.and.arrow.forward")
+                    .font(.system(size: 32))
+                    .foregroundColor(.red)
+            }
+
+            Spacer()
+
+            Button {
+                controller.openProfileSettings?()
+            } label: {
+                Image(systemName: "person.crop.circle.fill")
+                    .font(.system(size: 32))
+                    .foregroundColor(.gray)
+            }
+
+            Spacer()
+
+            Button {
+                controller.openLikes?()
+            } label: {
+                Image(systemName: "heart.fill")
+                    .foregroundColor(.red)
+                    .font(.system(size: 32))
             }
         }
     }
@@ -80,7 +84,7 @@ struct TimerView: View {
 
     var body: some View {
         VStack {
-          Text(String(timeRemaining))
+          Text("☠️ --> \(timeRemaining) <--- ☠️")
             .font(.title)
             .bold()
             .font(.system(size: 30))
@@ -94,6 +98,7 @@ struct TimerView: View {
             }
             Button {
                 timeRemaining = 5
+                reloadRequestEnabled = true
                 comletion()
             } label: {
                 RoundedRectangle(cornerRadius: 12)
