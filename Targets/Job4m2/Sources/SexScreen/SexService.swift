@@ -45,8 +45,6 @@ final class SexService {
 //        let route = APIRoute(route: Route.User.cardAction.asPath, method: .post)
 //        let parameters = CardAction(id: cardId, action: actionType.rawValue)
 //        return await apiService.perform(route: route, parameters: parameters)
-
-//        Включить, когда будем показывать преподу
         return nil
     }
 }
