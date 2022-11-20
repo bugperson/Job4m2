@@ -159,14 +159,6 @@ struct RegistrationView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .transition(.slide)
                 .animation(.easeInOut(duration: Constants.animationDuration))
-
-//            TextField(
-//                LocalStrings.company,
-//                text: $controller.company
-//            )
-//            .textFieldStyle(RoundedBorderTextFieldStyle())
-//            .transition(.slide)
-//            .animation(.easeInOut(duration: Constants.animationDuration))
         }
         .animation(.easeInOut(duration: Constants.animationDuration))
     }
