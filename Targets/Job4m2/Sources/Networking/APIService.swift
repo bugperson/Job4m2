@@ -21,6 +21,8 @@ enum Route {
         case likes = "likes"
         case apns = "apns_token"
         case match = "match"
+        case me = "me"
+        case update = "update"
 
         var asPath: String {
             return "user/" + self.rawValue
