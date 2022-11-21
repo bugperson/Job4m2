@@ -12,11 +12,8 @@ import SwiftUI
 struct TGAlertView: View {
     @State private var opacity: CGFloat = 0
     @State private var backgroundOpacity: CGFloat = 0
-    @State private var isTextCopied = false
 
     @Binding var tgLink: String
-
-    var copyAction: Action?
 
     @Environment(\.dismiss) private var dismiss
 
@@ -31,10 +28,9 @@ struct TGAlertView: View {
     private func alertView() -> some View {
         HStack {
             Text(tgLink)
-            Image(systemName: isTextCopied ? "doc.on.doc.fill" :  "doc.on.doc")
+            Image(systemName: "arrow.up.message.fill")
                 .onTapGesture {
-                    isTextCopied = true
-                    copyAction?()
+                    UIApplication.shared.open(URL(string: tgLink)!)
                 }
         }
         .padding()
@@ -66,7 +62,9 @@ struct CustomTGAlertModifier: ViewModifier {
         content
             .fullScreenCover(isPresented: $isPresented) {
                 TGAlertView(tgLink: $tgLink)
-                    .background(ClearBackground())
+                    .background {
+                        ClearBackground()
+                    }
             }
     }
 }

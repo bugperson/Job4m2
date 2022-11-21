@@ -21,7 +21,7 @@ final class LikesCoordinator {
     func start() {
         let controller = LikesController()
         let vc = LikesView(controller: controller).hosted()
-//        vc.modalPresentationStyle = .formSheet
+        vc.modalPresentationStyle = .formSheet
         container.present(vc, animated: false)
     }
 }

@@ -10,6 +10,7 @@ import Foundation
 
 struct LikesDTO: Codable {
     let card: LikeDTO
+    let tg_link: String
 }
 
 struct LikeDTO: Codable {
@@ -22,7 +23,6 @@ struct LikeDTO: Codable {
         case pictureUrl = "picture_url"
         case tags
         case attachments
-        case tgLink = "tg_link"
     }
 
     let id: Int
@@ -32,5 +32,4 @@ struct LikeDTO: Codable {
     let pictureUrl: String
     let tags: [TagDTO]
     let attachments: [Attachments]
-    let tgLink: String
 }

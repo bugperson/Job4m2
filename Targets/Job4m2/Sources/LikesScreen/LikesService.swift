@@ -13,13 +13,15 @@ final class LikesService {
 
     func fetchCards() async -> [CardModel] {
         let route = APIRoute(
-            route: Route.User.likes.asPath,
+            route: Route.User.match.asPath,
             method: .get
         )
-        let cardsDTO: [LikeDTO]? = await apiService.perform(route: route)
+        let cardsDTO: [LikesDTO]? = await apiService.perform(route: route)
 
-        return (cardsDTO ?? []).map { like in
-            let tags = like.tags.map { tag in
+        let cards: [LikesDTO] = cardsDTO ?? []
+
+        return cards.map { like in
+            let tags = like.card.tags.map { tag in
                 TagModel(
                     id: tag.id,
                     text: tag.text,
@@ -28,13 +30,13 @@ final class LikesService {
             }
 
             return CardModel(
-                id: like.id,
-                imagePath: like.pictureUrl,
-                title: like.title,
-                subtitile: like.subtitle,
-                description: like.description,
+                id: like.card.id,
+                imagePath: like.card.pictureUrl,
+                title: like.card.title,
+                subtitile: like.card.subtitle,
+                description: like.card.description,
                 tags: tags,
-                tgLink: like.tgLink
+                tgLink: like.tg_link
             )
         }
     }
