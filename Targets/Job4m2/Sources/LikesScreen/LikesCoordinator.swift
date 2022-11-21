@@ -24,4 +24,15 @@ final class LikesCoordinator {
         vc.modalPresentationStyle = .formSheet
         container.present(vc, animated: false)
     }
+
+    func start(with deeplink: Deeplinks) {
+        let controller = LikesController()
+        switch deeplink {
+        case .matchscreen(let int):
+            controller.startWithCardId = int
+        }
+        let vc = LikesView(controller: controller).hosted()
+        vc.modalPresentationStyle = .formSheet
+        container.present(vc, animated: false)
+    }
 }
