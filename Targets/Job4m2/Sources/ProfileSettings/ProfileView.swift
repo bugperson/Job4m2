@@ -7,8 +7,7 @@
 //
 
 import SwiftUI
-
-
+import PhotosUI
 
 struct ProfileView: View {
     @ObservedObject var controller: ProfileController
@@ -17,28 +16,11 @@ struct ProfileView: View {
     var body: some View {
         VStack {
             ScrollView {
-                CachedAsyncImage(url: URL(string: controller.imagePath)!) { image in
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 361, height: 467, alignment: .top)
-                        .cornerRadius(40)
-                } placeholder: {
-                    ZStack {
-                        Job4m2Asset.defaultphoto.image.asImage()
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 361, height: 467, alignment: .top)
-                            .cornerRadius(40)
-                        ProgressView()
-                            .progressViewStyle(.circular)
-                            .frame(alignment: .center)
-                    }
-                }
+                photoPicker
 
                 TextField(
                     controller.userType == .workFinder ? LocalStrings.name : "Название компании",
-                    text: $controller.name
+                    text:  controller.userType == .workFinder ? $controller.name : $controller.company
                 )
                 .textFieldStyle(RoundedBorderTextFieldStyle())
 
@@ -68,33 +50,47 @@ struct ProfileView: View {
         }.onAppear {
             controller.onAppear()
         }
+        .padding()
+    }
+
+    var photoPicker: some View {
+        PhotosPicker(
+            selection: $controller.photos,
+            maxSelectionCount: 1
+        ) {
+            if let photoData = controller.photoData,
+               let image = UIImage(data: photoData) {
+                Image(uiImage: image)
+                    .resizable()
+                    .frame(width: 100, height: 100, alignment: .center)
+                    .clipShape(Circle())
+            } else {
+                CachedAsyncImage(url: URL(string: controller.imagePath)) { image in
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 100, height: 100, alignment: .center)
+                        .clipShape(Circle())
+                } placeholder: {
+                    ZStack {
+                        Job4m2Asset.defaultphoto.image.asImage()
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 100, height: 100, alignment: .center)
+                            .clipShape(Circle())
+                    }
+                }
+            }
+        }
+        .onChange(of: controller.photos) { newValue in
+            controller.updatePhoto()
+        }
     }
 
     var tags: some View {
         ScrollView(.horizontal) {
-            let first = Array(controller.tags[0 ..< controller.tags.count / 2])
-            let sec = Array(controller.tags[controller.tags.count / 2 ..< controller.tags.count])
-
-            LazyHGrid(rows: [GridItem(.flexible())]) {
-                ForEach(first) { tag in
-                    Text(tag.text)
-                        .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-                        .animation(nil, value: tag.id)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(.gray, lineWidth: 1)
-                                .background(tag.isSelected ? Color.brown : Color.clear)
-                                .animation(nil, value: tag.id)
-                        )
-                        .cornerRadius(8)
-                        .onTapGesture {
-                            controller.onTagSelected(tagID: tag.id)
-                        }
-                        .animation(nil, value: tag.id)
-                }
-            }
-            LazyHGrid(rows: [GridItem(.flexible())]) {
-                ForEach(sec) { tag in
+            LazyHGrid(rows: [GridItem(.flexible()), GridItem(.flexible())]) {
+                ForEach(controller.tags) { tag in
                     Text(tag.text)
                         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
                         .animation(nil, value: tag.id)

@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 final class LikesController: ObservableObject {
-    @Published var cards: [LikesModel] = []
+    @Published var cards: [CardModel] = []
 
     private var likesService = LikesService()
 

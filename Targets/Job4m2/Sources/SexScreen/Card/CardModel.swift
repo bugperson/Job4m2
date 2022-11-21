@@ -19,6 +19,7 @@ struct CardModel: Identifiable {
     var description: String = ""
     var tags: [TagModel] = []
     var swipeAction: SwipeAction?
+    var tgLink: String = ""
 }
 
 extension CardModel {

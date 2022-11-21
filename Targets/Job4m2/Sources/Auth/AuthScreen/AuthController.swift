@@ -43,7 +43,9 @@ final class AuthController: ObservableObject {
     }
 
     func authUser() {
-        guard let authParameters else { return }
-        authService.auth(parameters: authParameters)
+        Task {
+            guard let authParameters else { return }
+            await authService.auth(parameters: authParameters)
+        }
     }
 }

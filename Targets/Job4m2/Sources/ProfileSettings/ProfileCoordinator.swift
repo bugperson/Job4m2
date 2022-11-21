@@ -20,7 +20,7 @@ class ProfileCoordinator {
     func start() {
         let controller = ProfileController()
         let vc = ProfileView(controller: controller).hosted()
-        vc.modalPresentationStyle = .fullScreen
+        vc.modalPresentationStyle = .formSheet
         container.present(vc, animated: false)
     }
 }

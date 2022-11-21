@@ -22,9 +22,13 @@ struct ProfileModel {
 }
 
 struct ProfileTag: Identifiable, Codable {
+    private enum CodingKeys: String, CodingKey {
+        case id = "tid"
+        case text = "description"
+        case isSelected
+    }
 
     let id: Int
     let text: String
     let isSelected: Bool
 }
-

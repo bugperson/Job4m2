@@ -9,9 +9,10 @@
 import Foundation
 import SwiftUI
 import Combine
+import PhotosUI
 
 class ProfileController: ObservableObject {
-    var model: ProfileModel? = nil
+    @MainActor @Published var model: ProfileModel? = nil
 
     @Published var name: String = ""
     @Published var age: String = ""
@@ -22,7 +23,10 @@ class ProfileController: ObservableObject {
     @Published var slider: Double = 18
     @Published var userType: UserType = .workDealer
     @Published var imagePath: String = ""
-    @MainActor @Published var tags: [RegistrationTag] = []
+    @MainActor @Published var tags: [ProfileTag] = []
+
+    @Published var photos: [PhotosPickerItem] = []
+    @Published var photoData: Data?
 
     // Костыль
     @Published var type: String = ""
@@ -31,6 +35,7 @@ class ProfileController: ObservableObject {
     var disposable = Set<AnyCancellable>()
 
     private let profileService = ProfileService()
+    private let registrationService = RegistrationService()
 
     func onAppear() {
         Task {
@@ -38,7 +43,7 @@ class ProfileController: ObservableObject {
                 return
             }
 
-            await MainActor.run { [fetchedProfile] in
+            await MainActor.run {
                 model = fetchedProfile
 
                 name = fetchedProfile.name
@@ -50,6 +55,7 @@ class ProfileController: ObservableObject {
                 slider = Double(fetchedProfile.age)
                 userType = fetchedProfile.type == "candidate" ? .workFinder : .workDealer
                 imagePath = fetchedProfile.image
+                tags = fetchedProfile.tags
 
                 // Костыль
                 type = fetchedProfile.type
@@ -60,24 +66,28 @@ class ProfileController: ObservableObject {
 
     @MainActor
     func saveData() {
-        let selectedTags = tags
-            .filter { $0.isSelected }
-            .map { $0.id }
-
-        let profileUpdateDTO = ProfileUpdateDTO(
-            name: name,
-            age: age,
-            education: education,
-            company: company,
-            description: description,
-            tg_link: telegrammName,
-            type: type,
-            tags: selectedTags,
-            attachments: attachments
-        )
-
         Task {
+            let selectedTags = tags
+                .filter { $0.isSelected }
+                .map { $0.id }
+
+            let profileUpdateDTO = ProfileUpdateDTO(
+                name: name,
+                age: Int(slider),
+                education: education,
+                company: company,
+                description: description,
+                tg_link: telegrammName,
+                type: type,
+                tags: selectedTags,
+                attachments: attachments
+            )
+
             let _ = await profileService.updateProfile(model: profileUpdateDTO)
+
+            if let photoData = self.photoData {
+                let _ = await registrationService.uploadPhoto(data: photoData)
+            }
         }
     }
 
@@ -85,13 +95,32 @@ class ProfileController: ObservableObject {
     func onTagSelected(tagID: Int) {
         tags = tags.map { tag in
             if tag.id == tagID {
-                return RegistrationTag(
+                return ProfileTag(
                     id: tag.id,
                     text: tag.text,
                     isSelected: !tag.isSelected
                 )
             } else {
                 return tag
+            }
+        }
+    }
+
+    func updatePhoto() {
+        guard let image = photos.first else { return }
+        image.loadTransferable(type: Data.self) { result in
+            switch result {
+            case .success(let data):
+                if let data {
+                    Task {
+                        await MainActor.run {
+                            self.photoData = data
+                        }
+                    }
+                }
+            case .failure(let failure):
+                fatalError()
+                print(failure.localizedDescription)
             }
         }
     }
