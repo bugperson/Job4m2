@@ -19,6 +19,9 @@ struct CardView: View {
 
     @State var isAlertOnCardEnabled = false
 
+    var isCardOnLike = false
+    var tgLink: String = "tg://danil.123"
+
     var body: some View {
         ZStack (alignment: .topLeading) {
             Rectangle()
@@ -46,9 +49,7 @@ struct CardView: View {
         .shadow(radius: 10)
         .offset(x: offset.width * 1, y: offset.height * 0.4)
         .rotationEffect(.degrees(Double(offset.width / 40)))
-        .gesture(
-            dragCardGesture
-        )
+        .gesture(dragCardGesture)
     }
 
     var image: some View {
@@ -74,6 +75,22 @@ struct CardView: View {
 
     var textContent: some View {
         VStack(alignment: .leading) {
+
+            if isCardOnLike {
+                RoundedRectangle(cornerRadius: 12)
+                    .frame(height: 30)
+                    .foregroundColor(.blue)
+                    .overlay {
+                        Text(tgLink)
+                            .foregroundColor(.white)
+                            .font(.system(size: 24))
+                            .fontWeight(.regular)
+                    }
+                    .onTapGesture {
+                        UIApplication.shared.open(URL(string: tgLink)!)
+                    }
+            }
+
             Text(model.title)
                 .foregroundColor(.white)
                 .font(.system(size: 32))
@@ -103,23 +120,27 @@ struct CardView: View {
     var dragCardGesture: some Gesture {
         DragGesture()
             .onChanged { gesture in
-                offset = gesture.translation
-                withAnimation {
-                    let value = UIScreen.main.bounds.width
-                    if gesture.translation.width > 0 {
-                        backgroundOpacity = 1 - gesture.translation.width / value
-                        alertOpacity = gesture.translation.width / value * 4
-                        alertType = .like
-                    } else {
-                        backgroundOpacity = 1 + gesture.translation.width / value
-                        alertOpacity = gesture.translation.width / value * -4
-                        alertType = .dislike
+                if !isCardOnLike {
+                    offset = gesture.translation
+                    withAnimation {
+                        let value = UIScreen.main.bounds.width
+                        if gesture.translation.width > 0 {
+                            backgroundOpacity = 1 - gesture.translation.width / value
+                            alertOpacity = gesture.translation.width / value * 4
+                            alertType = .like
+                        } else {
+                            backgroundOpacity = 1 + gesture.translation.width / value
+                            alertOpacity = gesture.translation.width / value * -4
+                            alertType = .dislike
+                        }
                     }
                 }
             }
             .onEnded { _ in
                 withAnimation {
-                    swipeCard(width: offset.width)
+                    if !isCardOnLike {
+                        swipeCard(width: offset.width)
+                    }
                 }
             }
     }
