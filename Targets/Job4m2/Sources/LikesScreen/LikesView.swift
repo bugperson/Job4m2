@@ -19,12 +19,11 @@ struct LikesView: View {
             if !controller.cards.isEmpty {
                 VStack {
                     ForEach(controller.cards) { cardModel in
-                        CardView(model: cardModel)
+                        CardView(model: cardModel, isCardOnLike: true, tgLink: cardModel.tgLink)
                             .padding()
                             .onTapGesture {
                                 tgLinkText = cardModel.tgLink
                                 isTGLinkVisible = true
-                                UIApplication.shared.open(URL(string: cardModel.tgLink)!)
                             }
                     }
                 }
