@@ -30,14 +30,33 @@ struct AuthView: View {
                             Text(Strings.Auth.authButton)
                                 .foregroundColor(.white)
                             Image(systemName: "lightbulb.led.fill")
-                                .foregroundStyle(.yellow, .white)
+                                .foregroundStyle(.black, .white, .yellow)
                         }
 
                     }
             }
-            .disabled(controller.isAuthButtonEmable)
+            .disabled(!controller.isAuthButtonEmable)
+            .foregroundColor(.gray)
+
+            Button {
+                controller.onRegistrateButtonTapped()
+            } label: {
+                Rectangle()
+                    .frame(width: 215, height: 30)
+                    .cornerRadius(12)
+                    .overlay {
+                        HStack {
+                            Text("Зарегистрироваться")
+                                .foregroundColor(.white)
+                            Image(systemName: "lightbulb.led.fill")
+                                .foregroundStyle(.white, .red, .blue)
+                        }
+
+                    }
+            }
             .foregroundColor(.gray)
         }
+        .onAppear(perform: controller.onAppear)
         .padding()
     }
 }

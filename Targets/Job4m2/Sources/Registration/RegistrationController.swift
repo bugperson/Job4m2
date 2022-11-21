@@ -32,6 +32,7 @@ final class RegistrationController: ObservableObject {
     private var companyParameters: CompanyRegistrationParameters?
 
     var onRegistrationFinish: Action?
+    var onEnterButtonTapped: Action?
 
     func onApear() {
         $segmentSelected.sink { value in
@@ -132,6 +133,10 @@ final class RegistrationController: ObservableObject {
                 return tag
             }
         }
+    }
+
+    func onEnter() {
+        onEnterButtonTapped?()
     }
 
     func registrate() {

@@ -14,6 +14,10 @@ extension View {
 final class RegistrationCoordinator {
 
     var onFinishEvent: Action?
+    var onEnter: Action?
+
+    var authCoordinator: AuthCoordinator?
+
     let container: UINavigationController
 
     init(container: UINavigationController) {
@@ -26,10 +30,27 @@ final class RegistrationCoordinator {
 
         hostedController.modalPresentationStyle = .fullScreen
         container.setViewControllers([hostedController], animated: false)
+        controller.onEnterButtonTapped = {
+            self.startAuthCoordinator()
+        }
+
         controller.onRegistrationFinish = {
             self.onFinishEvent?()
             self.registerForPushNotifications()
         }
+    }
+
+    func startAuthCoordinator() {
+        let authCoordinator = AuthCoordinator(container: container)
+        self.authCoordinator = authCoordinator
+        authCoordinator.onRegister = {
+            self.start()
+        }
+        authCoordinator.onFinishEvent = {
+            self.onFinishEvent?()
+            self.registerForPushNotifications()
+        }
+        authCoordinator.start()
     }
 
     func registerForPushNotifications() {
