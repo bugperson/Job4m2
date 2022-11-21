@@ -18,6 +18,11 @@ class AppCoordinator {
         makeRootViewController(container)
     }
 
+    init(scene: UIWindowScene) {
+        self.window = UIWindow(windowScene: scene)
+        makeRootViewController(container)
+    }
+
     func start() {
         let setupCoordinator = SetupCoordinator(container: container)
         self.setupCoordinator = setupCoordinator
