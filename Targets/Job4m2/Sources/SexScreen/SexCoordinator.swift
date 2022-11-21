@@ -26,6 +26,13 @@ final class SexCoordinator {
         self.container = container
     }
 
+    func openDeeplink(deeplink: Deeplinks) {
+        switch deeplink {
+        case .matchscreen(let int):
+            openLikes()
+        }
+    }
+
     func start() {
         let controller = SexController()
 

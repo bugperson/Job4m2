@@ -1,6 +1,10 @@
 import Foundation
 import UIKit
 
+final class Zalupa {
+    static var a: ((Deeplinks) -> Void)?
+}
+
 class AppCoordinator {
 
     private let window: UIWindow
@@ -41,7 +45,15 @@ class AppCoordinator {
         sexCoordinator.start()
     }
 
+    func openDeeplink(deeplink: Deeplinks) {
+        switch deeplink {
+        case .matchscreen:
+            sexCoordinator?.openDeeplink(deeplink: deeplink)
+        }
+    }
+
     private func makeRootViewController(_ vc: UIViewController) {
+        Zalupa.a = openDeeplink(deeplink:)
         window.rootViewController = vc
         window.makeKeyAndVisible()
     }
