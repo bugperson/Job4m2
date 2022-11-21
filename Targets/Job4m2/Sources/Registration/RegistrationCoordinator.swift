@@ -27,7 +27,6 @@ final class RegistrationCoordinator {
         hostedController.modalPresentationStyle = .fullScreen
         container.setViewControllers([hostedController], animated: false)
         controller.onRegistrationFinish = {
-            print("hui")
             self.onFinishEvent?()
             self.registerForPushNotifications()
         }

@@ -12,13 +12,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
     ) -> Bool {
         
-        let appCoordinator = AppCoordinator()
-        self.appCoordinator = appCoordinator
-        appCoordinator.start()
-        
+//        let appCoordinator = AppCoordinator()
+//        self.appCoordinator = appCoordinator
+//        appCoordinator.start()
+//        launchOptions?.forEach { print($0) }
         return true
     }
     
+    func application(
+        _ application: UIApplication,
+        didReceiveRemoteNotification userInfo: [AnyHashable : Any],
+        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
+    ) {
+        print(userInfo["url"])
+    }
+
     func application(
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
