@@ -20,15 +20,13 @@ final class AuthService {
 
     private let apiService = APIService.shared
 
-    func auth(parameters: AuthParameters) {
-        Task {
-            guard
-                let token = await fetchToken(parameters)
-            else { return }
+    func auth(parameters: AuthParameters) async {
+        guard
+            let token = await fetchToken(parameters)
+        else { return }
 
-            saveToken(token)
-            saveUser(User(username: parameters.username, password: parameters.password))
-        }
+        saveToken(token)
+        saveUser(User(username: parameters.username, password: parameters.password))
     }
 
     func logout() {

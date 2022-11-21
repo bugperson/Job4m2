@@ -14,15 +14,17 @@ struct SexScreen: View {
 
     var body: some View {
         VStack {
-            if controller.cards.count > 0 {
-                buttons
-                    .padding()
-            }
             ZStack {
                 makeCard(with: controller.index + 1)
                 makeCard(with: controller.index)
             }
             .padding()
+        }
+        .safeAreaInset(edge: .top) {
+            if controller.cards.count > 0 {
+                buttons
+                    .padding()
+            }
         }
         .onAppear {
             controller.onAppear()
@@ -32,7 +34,7 @@ struct SexScreen: View {
 
     @ViewBuilder
     func makeCard(with index: Int) -> some View {
-        if controller.cards.count < 0 {
+        if controller.cards.count > 0 {
             CardView(model: controller.cards[index % controller.cards.count])
                 .id(controller.cards[index % controller.cards.count].id)
         } else {

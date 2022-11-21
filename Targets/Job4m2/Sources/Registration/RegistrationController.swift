@@ -141,11 +141,11 @@ final class RegistrationController: ObservableObject {
             if let userParameters = userParameters, userType == .workFinder {
                 guard let _ = await registrationService.registerUser(parameters: userParameters) else { return }
                 user = User(username: username, password: password)
-                auth(username: username, password: password)
+                await auth(username: username, password: password)
             } else if let companyParameters = companyParameters, userType == .workDealer {
                 guard let _ = await registrationService.registerCompany(parameters: companyParameters) else { return }
                 user = User(username: username, password: password)
-                auth(username: username, password: password)
+                await auth(username: username, password: password)
             }
 
             guard let superUser = user else { return }
@@ -180,8 +180,8 @@ final class RegistrationController: ObservableObject {
         }
     }
 
-    private func auth(username: String, password: String) {
+    private func auth(username: String, password: String) async {
         let parameters = AuthParameters(username: username, password: password)
-        authService.auth(parameters: parameters)
+        await authService.auth(parameters: parameters)
     }
 }

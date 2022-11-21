@@ -9,10 +9,10 @@
 import Foundation
 
 struct ProfileDTO: Codable {
-    let name: String
-    let age: Int
-    let education: String
-    let company: String
+    let name: String?
+    let age: Int?
+    let education: String?
+    let company: String?
     let description: String
     let tg_link: String
     let image: String
@@ -23,7 +23,7 @@ struct ProfileDTO: Codable {
 
 struct ProfileUpdateDTO: Codable {
     let name: String
-    let age: String
+    let age: Int
     let education: String
     let company: String
     let description: String

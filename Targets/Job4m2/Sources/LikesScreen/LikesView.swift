@@ -11,19 +11,25 @@ import SwiftUI
 struct LikesView: View {
     @ObservedObject var controller: LikesController
 
+    @State var isTGLinkVisible = false
+    @State var tgLinkText = "Upss"
+
     var body: some View {
         ScrollView {
-            LazyVGrid(
-                columns: [
-                    GridItem(.flexible()),
-                    GridItem(.flexible()),
-                    GridItem(.flexible())
-                ]
-            ) {
+            VStack {
                 ForEach(controller.cards) { cardModel in
-                    makeCard(with: cardModel)
+                    CardView(model: cardModel)
+                        .padding()
+                        .onTapGesture {
+                            tgLinkText = cardModel.tgLink
+                            isTGLinkVisible = true
+                        }
                 }
             }
+        }
+        .tgAlert(tgLink: $tgLinkText, isPresented: $isTGLinkVisible)
+        .onTapGesture {
+            isTGLinkVisible = false
         }
         .onAppear {
             controller.onAppear()

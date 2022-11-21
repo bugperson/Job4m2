@@ -18,12 +18,12 @@ class ProfileService {
         )
         let profileDTO: ProfileDTO? = await apiService.perform(route: route)
 
-        return (profileDTO ?? nil).map { profile in
+        return profileDTO.map { profile in
             ProfileModel(
-                name: profile.name,
-                age: profile.age,
-                education: profile.education,
-                company: profile.company,
+                name: profile.name ?? "",
+                age: profile.age ?? 1488,
+                education: profile.education ?? "",
+                company: profile.company ?? "",
                 description: profile.description,
                 tg_link: profile.tg_link,
                 image: profile.image,

@@ -17,6 +17,7 @@ final class SexCoordinator {
 
     private var likesCoordinator: LikesCoordinator?
     private var registrationCoordinator: RegistrationCoordinator?
+    private var profileCoordinator: ProfileCoordinator?
 
     private let authService = AuthService()
 
@@ -29,6 +30,7 @@ final class SexCoordinator {
 
         controller.openLikes = openLikes
         controller.exit = exit
+        controller.openProfileSettings = openProfileSettings
 
         let vc = SexScreen(controller: controller).hosted()
         vc.view.backgroundColor = .gray
@@ -40,6 +42,12 @@ final class SexCoordinator {
         let likesCoordinator = LikesCoordinator(container: container)
         self.likesCoordinator = likesCoordinator
         likesCoordinator.start()
+    }
+
+    func openProfileSettings() {
+        let profileCoordinator = ProfileCoordinator(container: container)
+        self.profileCoordinator = profileCoordinator
+        profileCoordinator.start()
     }
 
     func exit() {
