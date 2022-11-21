@@ -18,11 +18,19 @@ final class SexCoordinator {
     private var likesCoordinator: LikesCoordinator?
     private var registrationCoordinator: RegistrationCoordinator?
     private var profileCoordinator: ProfileCoordinator?
+    private var authCoordinator: AuthCoordinator?
 
     private let authService = AuthService()
 
     init(container: UINavigationController) {
         self.container = container
+    }
+
+    func openDeeplink(deeplink: Deeplinks) {
+        switch deeplink {
+        case .matchscreen(let int):
+            openLikes()
+        }
     }
 
     func start() {
@@ -52,6 +60,30 @@ final class SexCoordinator {
 
     func exit() {
         authService.logout()
-        fatalError()
+        startAuthCoordinator()
+    }
+
+    func startAuthCoordinator() {
+        let authCoordinator = AuthCoordinator(container: container)
+        self.authCoordinator = authCoordinator
+        authCoordinator.onFinishEvent = {
+            self.start()
+        }
+        authCoordinator.onRegister = {
+            self.showRegister()
+        }
+        authCoordinator.start()
+    }
+
+    func showRegister() {
+        let registrationCoordinator = RegistrationCoordinator(container: container)
+        self.registrationCoordinator = registrationCoordinator
+        registrationCoordinator.start()
+        registrationCoordinator.onFinishEvent = {
+            self.start()
+        }
+        registrationCoordinator.onEnter = {
+            self.startAuthCoordinator()
+        }
     }
 }

@@ -1,5 +1,10 @@
 import UIKit
 
+enum Deeplinks {
+
+    case matchscreen(Int)
+}
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -24,7 +29,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didReceiveRemoteNotification userInfo: [AnyHashable : Any],
         fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
     ) {
-        print(userInfo["url"])
+        guard let str = userInfo["url"] as? String else { return }
+        guard let url = URL(string: str) else { return }
+        guard url.scheme == "job4mscheme" else { return }
+
+        print(url.path)
+        var components = URLComponents(
+            url: url,
+            resolvingAgainstBaseURL: false
+        )!
+
+        var id: Int?
+        print(components.queryItems?.forEach { hui in
+            
+            id = Int(hui.value ?? "")
+        })
+        guard let idd = id else { return }
+        Zalupa.a?(.matchscreen(idd))
     }
 
     func application(

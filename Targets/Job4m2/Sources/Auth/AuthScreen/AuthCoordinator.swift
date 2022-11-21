@@ -13,9 +13,11 @@ import SwiftUI
 final class AuthCoordinator {
 
     var onFinishEvent: Action?
-    let container: UIViewController
+    var onRegister: Action?
 
-    init(container: UIViewController) {
+    let container: UINavigationController
+
+    init(container: UINavigationController) {
         self.container = container
     }
 
@@ -23,6 +25,10 @@ final class AuthCoordinator {
         let controller = AuthController()
         let vc = AuthView(controller: controller).hosted()
         vc.modalPresentationStyle = .fullScreen
-        container.present(vc, animated: false)
+        container.setViewControllers([vc], animated: true)
+        controller.onEnter = {
+            self.onFinishEvent?()
+        }
+        controller.onRegistrationButtonTapped = onRegister
     }
 }

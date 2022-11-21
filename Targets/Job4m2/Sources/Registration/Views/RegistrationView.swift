@@ -76,14 +76,11 @@ struct RegistrationView: View {
                     registrationButton
                         .transition(.move(edge: .top))
                         .animation(.easeInOut(duration: Constants.animationDuration))
-                    
                 }
-
                 .onAppear {
                     controller.onApear()
                 }
             }
-            .blendMode(.exclusion)
             .padding()
         }
     }
@@ -143,22 +140,42 @@ struct RegistrationView: View {
     }
 
     var registrationButton: some View {
-        HStack {
-            Spacer()
-            Button(
-                action: {
-                    controller.registrate()
-                },
-                label: {
-                    Label {
-                        Text("Зарегестрироваться")
-                    } icon: {
-                        Image(systemName: "brain")
+        VStack {
+            HStack {
+                Spacer()
+                Button(
+                    action: {
+                        controller.registrate()
+                    },
+                    label: {
+                        Label {
+                            Text("Зарегестрироваться")
+                        } icon: {
+                            Image(systemName: "brain")
+                        }
                     }
-                }
-            )
-            .disabled(!controller.isAllFiled)
-            Spacer()
+                )
+                .disabled(!controller.isAllFiled)
+                Spacer()
+            }
+
+            Button {
+                controller.onEnter()
+            } label: {
+                Rectangle()
+                    .frame(width: 100, height: 30)
+                    .cornerRadius(12)
+                    .overlay {
+                        HStack {
+                            Text("Войти")
+                                .foregroundColor(.white)
+                            Image(systemName: "lightbulb.led.fill")
+                                .foregroundStyle(.black, .white, .yellow)
+                        }
+
+                    }
+            }
+            .foregroundColor(.gray)
         }
     }
 }
