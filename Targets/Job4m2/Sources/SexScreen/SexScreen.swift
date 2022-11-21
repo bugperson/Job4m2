@@ -34,13 +34,15 @@ struct SexScreen: View {
 
     @ViewBuilder
     func makeCard(with index: Int) -> some View {
-        if controller.cards.count > 0 {
+        if controller.isFetchSuccess, !controller.cards.isEmpty {
             CardView(model: controller.cards[index % controller.cards.count])
                 .id(controller.cards[index % controller.cards.count].id)
-        } else {
-            TimerView {
-                controller.onAppear()
-            }
+        } else if !controller.isFetchSuccess {
+            TimerView { controller.onAppear() }
+        } else if controller.cards.isEmpty {
+            ProgressView()
+                .progressViewStyle(.circular)
+                .foregroundColor(.red)
         }
     }
     

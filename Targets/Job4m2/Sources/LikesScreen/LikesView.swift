@@ -17,7 +17,7 @@ struct LikesView: View {
     var body: some View {
         ScrollView {
             ScrollViewReader { value in
-                if !controller.cards.isEmpty {
+                if controller.isFetchSuccess, !controller.cards.isEmpty {
                     VStack {
                         ForEach(controller.cards) { cardModel in
                             CardView(model: cardModel, isCardOnLike: true, tgLink: cardModel.tgLink)
@@ -31,12 +31,15 @@ struct LikesView: View {
                     .onAppear {
                         value.scrollTo(controller.startWithCardId)
                     }
-                } else {
+                } else if controller.isFetchSuccess, controller.cards.isEmpty {
                     Text("Упс тебя никто не возьмет на работу :(")
+                } else {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .foregroundColor(.red)
                 }
             }
         }
-//        .tgAlert(tgLink: $tgLinkText, isPresented: $isTGLinkVisible)
         .onTapGesture {
             isTGLinkVisible = false
         }

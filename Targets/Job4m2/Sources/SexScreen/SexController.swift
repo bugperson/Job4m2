@@ -13,6 +13,7 @@ final class SexController: ObservableObject {
     @Published var index: Int = 0
     @Published var isAlertPresented = false
     @Published var alertType: AlertType = .like
+    @Published var isFetchSuccess = true
 
     @MainActor @Published var cards: [CardModel] = []
 
@@ -21,6 +22,8 @@ final class SexController: ObservableObject {
     var openProfileSettings: Action?
     var openLikes: Action?
     var exit: Action?
+
+    
 
     func onAppear() {
         let action: CardModel.SwipeAction = { [weak self] id, actionType in
@@ -43,9 +46,15 @@ final class SexController: ObservableObject {
         Task {
             let fetchedCards = await sexService.fetchCards(with: action)
 
-            await MainActor.run { [fetchedCards] in
-                cards = fetchedCards
-                print(cards)
+            switch fetchedCards {
+            case .success(let success):
+                await MainActor.run { [success] in
+                    cards = success
+                    isFetchSuccess = true
+                    print(cards)
+                }
+            case .failure(_):
+                isFetchSuccess = false
             }
         }
     }
