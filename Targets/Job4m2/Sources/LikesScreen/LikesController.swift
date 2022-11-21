@@ -11,6 +11,7 @@ import SwiftUI
 
 final class LikesController: ObservableObject {
     @Published var cards: [CardModel] = []
+    @Published var isFetchSuccess = false
 
     private var likesService = LikesService()
 
@@ -18,12 +19,19 @@ final class LikesController: ObservableObject {
 
     func onAppear() {
         Task {
-            let fetchedCards = await likesService.fetchCards()
+            let fetchedCardsResult = await likesService.fetchCards()
 
-            await MainActor.run { [fetchedCards] in
-                cards = fetchedCards
-                print(cards)
+            switch fetchedCardsResult {
+            case .success(let success):
+                await MainActor.run { [success] in
+                    cards = success
+                    isFetchSuccess = true
+                    print(cards)
+                }
+            case .failure(_):
+                isFetchSuccess = false
             }
+
         }
     }
 }

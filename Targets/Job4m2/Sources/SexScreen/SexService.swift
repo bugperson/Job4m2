@@ -11,16 +11,22 @@ import Foundation
 final class SexService {
     private let apiService = APIService.shared
 
+    struct SexServiceError: Error { }
+
     func fetchCards(
         with action: CardModel.SwipeAction?
-    ) async -> [CardModel] {
+    ) async -> Result<[CardModel], Error> {
         let route = APIRoute(
             route: Route.User.feed.asPath,
             method: .get
         )
         let cardsDTO: CardsDTO? = await apiService.perform(route: route)
 
-        return (cardsDTO?.cards ?? []).map { card in
+        guard let cardsDTO = cardsDTO else {
+            return .failure(SexServiceError())
+        }
+
+        return .success(cardsDTO.cards.map { card in
             let tags = card.tags.map { tag in
                 TagModel(
                     id: tag.id,
@@ -38,7 +44,7 @@ final class SexService {
                 tags: tags,
                 swipeAction: action
             )
-        }
+        })
     }
 
     func sendCardAcion(with cardId: Int, actionType: CardActionType) async -> PisyaDTO? {

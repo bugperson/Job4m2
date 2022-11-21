@@ -11,16 +11,20 @@ import Foundation
 final class LikesService {
     private let apiService = APIService.shared
 
-    func fetchCards() async -> [CardModel] {
+    struct LikesError: Error { }
+
+    func fetchCards() async -> Result<[CardModel], Error> {
         let route = APIRoute(
             route: Route.User.match.asPath,
             method: .get
         )
         let cardsDTO: [LikesDTO]? = await apiService.perform(route: route)
 
-        let cards: [LikesDTO] = cardsDTO ?? []
+        guard let cards = cardsDTO else {
+            return .failure(LikesError())
+        }
 
-        return cards.map { like in
+        return .success(cards.map { like in
             let tags = like.card.tags.map { tag in
                 TagModel(
                     id: tag.id,
@@ -38,6 +42,6 @@ final class LikesService {
                 tags: tags,
                 tgLink: like.tg_link
             )
-        }
+        })
     }
 }
