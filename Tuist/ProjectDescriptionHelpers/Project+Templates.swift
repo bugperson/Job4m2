@@ -44,6 +44,17 @@ extension Project {
     private static func makeAppTargets(name: String, platform: Platform, dependencies: [TargetDependency]) -> [Target] {
         let platform: Platform = platform
         let infoPlist: [String: InfoPlist.Value] = [
+            "UIApplicationSceneManifest": [
+                "UIApplicationSupportsMultipleScenes": true,
+                "UISceneConfigurations": [
+                    "UIWindowSceneSessionRoleApplication": [
+                        [
+                            "UISceneConfigurationName": "Default Configuration",
+                            "UISceneDelegateClassName": "$(PRODUCT_MODULE_NAME).SceneDelegate"
+                        ]
+                    ]
+                ]
+            ],
             "CFBundleShortVersionString": "1.0",
             "CFBundleVersion": "1",
             "UIMainStoryboardFile": "",
@@ -55,7 +66,7 @@ extension Project {
                 ]
             ],
         ]
-
+        
         let mainTarget = Target(
             name: name,
             platform: platform,
