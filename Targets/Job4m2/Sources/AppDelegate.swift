@@ -6,7 +6,7 @@ enum Deeplinks {
 }
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     var appCoordinator: AppCoordinator?
     
@@ -21,14 +21,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        self.appCoordinator = appCoordinator
 //        appCoordinator.start()
 //        launchOptions?.forEach { print($0) }
+        UNUserNotificationCenter.current().delegate = self
         return true
     }
     
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        print("hui1")
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+        handleUserInfo(userInfo: userInfo)
+    }
+
     func application(
         _ application: UIApplication,
         didReceiveRemoteNotification userInfo: [AnyHashable : Any],
         fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
     ) {
+        defer { completionHandler(.noData)}
+        handleUserInfo(userInfo: userInfo)
+    }
+
+    func handleUserInfo(userInfo: [AnyHashable : Any]) {
         guard let str = userInfo["url"] as? String else { return }
         guard let url = URL(string: str) else { return }
         guard url.scheme == "job4mscheme" else { return }
@@ -47,7 +62,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard let idd = id else { return }
         Zalupa.a?(.matchscreen(idd))
     }
-
     func application(
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
