@@ -16,19 +16,24 @@ struct LikesView: View {
 
     var body: some View {
         ScrollView {
-            if !controller.cards.isEmpty {
-                VStack {
-                    ForEach(controller.cards) { cardModel in
-                        CardView(model: cardModel, isCardOnLike: true, tgLink: cardModel.tgLink)
-                            .padding()
-                            .onTapGesture {
-                                tgLinkText = cardModel.tgLink
-                                isTGLinkVisible = true
-                            }
+            ScrollViewReader { value in
+                if !controller.cards.isEmpty {
+                    VStack {
+                        ForEach(controller.cards) { cardModel in
+                            CardView(model: cardModel, isCardOnLike: true, tgLink: cardModel.tgLink)
+                                .padding()
+                                .onTapGesture {
+                                    tgLinkText = cardModel.tgLink
+                                    isTGLinkVisible = true
+                                }
+                        }
                     }
+                    .onAppear {
+                        value.scrollTo(controller.startWithCardId)
+                    }
+                } else {
+                    Text("Упс тебя никто не возьмет на работу :(")
                 }
-            } else {
-                Text("Упс тебя никто не возьмет на работу :(")
             }
         }
 //        .tgAlert(tgLink: $tgLinkText, isPresented: $isTGLinkVisible)

@@ -28,8 +28,8 @@ final class SexCoordinator {
 
     func openDeeplink(deeplink: Deeplinks) {
         switch deeplink {
-        case .matchscreen(let int):
-            openLikes()
+        case .matchscreen:
+            openLikes(with: deeplink)
         }
     }
 
@@ -50,6 +50,12 @@ final class SexCoordinator {
         let likesCoordinator = LikesCoordinator(container: container)
         self.likesCoordinator = likesCoordinator
         likesCoordinator.start()
+    }
+
+    func openLikes(with deeplink: Deeplinks) {
+        let likesCoordinator = LikesCoordinator(container: container)
+        self.likesCoordinator = likesCoordinator
+        likesCoordinator.start(with: deeplink)
     }
 
     func openProfileSettings() {

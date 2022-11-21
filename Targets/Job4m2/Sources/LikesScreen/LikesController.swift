@@ -14,6 +14,8 @@ final class LikesController: ObservableObject {
 
     private var likesService = LikesService()
 
+    var startWithCardId: Int = 0
+
     func onAppear() {
         Task {
             let fetchedCards = await likesService.fetchCards()
